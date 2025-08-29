@@ -1,0 +1,1 @@
+Copiez tout à la racine du dépôt `TarekDjaker.github.io` et ajustez les liens.
