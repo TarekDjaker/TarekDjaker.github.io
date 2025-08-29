@@ -1,185 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tarek DJAKER — Portfolio de Data Scientist</title>
-    <!--
-      Cette page constitue une proposition d'amélioration pour le site
-      https://tarekdjaker.github.io.  Elle fournit une structure claire et
-      responsive avec plusieurs sections destinées à présenter un
-      portfolio professionnel.  Le CSS associé se trouve dans le fichier
-      « style.css ».  Pour l'adapter à vos besoins, remplacez les textes
-      descriptifs et les liens par vos propres informations et projets.
-    -->
-    <meta
-      name="description"
-      content="Portfolio professionnel de Tarek DJAKER, Data Scientist passionné. Découvrez mes projets, compétences et contactez‑moi."
-    />
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tarek DJAKER — Data Scientist</title>
+    <meta name="description" content="Portfolio de Tarek DJAKER, Data Scientist en statistiques, apprentissage automatique et optimisation.">
+    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   </head>
   <body>
-    <header>
-      <nav class="navbar">
-        <div class="logo">Tarek DJAKER</div>
-        <ul class="nav-links">
-          <li><a href="#home">Accueil</a></li>
-          <li><a href="#about">À propos</a></li>
-          <li><a href="#skills">Compétences</a></li>
-          <li><a href="#projects">Projets</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="hamburger" aria-label="Menu mobile" tabindex="0">
-          <span></span><span></span><span></span>
+    <main class="container">
+      <section class="intro">
+        <div class="portrait-wrap">
+          <img src="assets/portrait.png" alt="Portrait de Tarek DJAKER" width="340" height="340" loading="eager">
         </div>
-      </nav>
-    </header>
-
-    <!-- Section d'accueil (hero) -->
-    <section id="home" class="hero">
-      <div class="hero-content">
-        <h1>
-          Bienvenue, je suis <span>Tarek DJAKER</span>
-        </h1>
-        <p>
-          Data Scientist passionné par l'analyse de données et la résolution de
-          problèmes complexes.
-        </p>
-        <a href="#projects" class="btn">Voir mes projets</a>
-      </div>
-    </section>
-
-    <!-- Section À propos -->
-    <section id="about">
-      <h2>À propos de moi</h2>
-      <p>
-        Cette section vous permet de présenter votre parcours, vos intérêts et
-        ce qui vous motive en data science. Par exemple : diplômé en
-        mathématiques appliquées, j'ai acquis une solide expérience en analyse
-        de données et apprentissage automatique en travaillant sur divers
-        projets allant de la modélisation prédictive à la visualisation de
-        données.
-      </p>
-    </section>
-
-    <!-- Section Compétences -->
-    <section id="skills">
-      <h2>Compétences</h2>
-      <ul class="skills-list">
-        <li>
-          <span class="skill-name">Python</span> – pandas, NumPy,
-          scikit‑learn
-        </li>
-        <li>
-          <span class="skill-name">R</span> – tidyverse, ggplot2
-        </li>
-        <li>
-          <span class="skill-name">Machine Learning</span> – régression,
-          classification, clustering
-        </li>
-        <li>
-          <span class="skill-name">Visualisation</span> – matplotlib,
-          seaborn, Tableau
-        </li>
-        <li>
-          <span class="skill-name">Bases de données</span> – SQL, NoSQL
-        </li>
-      </ul>
-    </section>
-
-    <!-- Section Projets -->
-    <section id="projects">
-      <h2>Projets</h2>
-      <p class="intro">
-        Voici quelques projets représentatifs. Chaque carte peut être
-        enrichie d’images, d’analyses détaillées et de liens vers les
-        dépôts GitHub ou les articles de blog correspondants.
-      </p>
-      <div class="projects-grid">
-        <div class="project-card">
-          <h3>Nom du projet 1</h3>
-          <p>
-            Brève description du projet, des méthodes utilisées et des
-            résultats obtenus. Mettez en avant votre contribution et
-            l’impact du projet.
+        <div class="intro-text">
+          <h1>Tarek‑Jan Djaker</h1>
+          <p class="lead">
+            ✨ Étudiant M2 en <strong>statistiques & machine learning</strong> (Sorbonne),
+            passionné par l’optimisation, l’apprentissage statistique et l’énergie.
           </p>
-          <a
-            href="https://github.com/USERNAME/REPO1"
-            target="_blank"
-            rel="noopener"
-            class="btn"
-            >Voir sur GitHub</a
-          >
-        </div>
-        <div class="project-card">
-          <h3>Nom du projet 2</h3>
           <p>
-            Brève description du projet, des méthodes utilisées et des
-            résultats obtenus. Mettez en avant votre contribution et
-            l’impact du projet.
+            Actuellement en recherche d’un stage/emploi en data science/ML.
+            Mes sujets du moment : <em>early stopping</em>, méthodes à noyaux, boosting,
+            séries temporelles énergie.
           </p>
-          <a
-            href="https://github.com/USERNAME/REPO2"
-            target="_blank"
-            rel="noopener"
-            class="btn"
-            >Voir sur GitHub</a
-          >
+          <nav class="cta">
+            <a class="chip" href="mailto:djakertarek@gmail.com">Email</a>
+            <a class="chip" href="https://www.linkedin.com/in/tarek-djaker" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a>
+            <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
+            <a class="btn"  href="assets/CV_Tarek_Djaker.pdf" target="_blank" rel="noopener">Mon CV</a>
+          </nav>
         </div>
-        <!-- Ajoutez d'autres cartes de projets ici -->
-      </div>
-    </section>
+      </section>
 
-    <!-- Section Contact -->
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Vous pouvez me contacter via les plateformes suivantes :</p>
-      <ul class="contact-list">
-        <li>
-          Email :
-          <a href="mailto:votre.email@example.com">votre.email@example.com</a>
-        </li>
-        <li>
-          LinkedIn :
-          <a
-            href="https://www.linkedin.com/in/votre-profil"
-            target="_blank"
-            rel="noopener"
-            >linkedin.com/in/votre-profil</a
-          >
-        </li>
-        <li>
-          GitHub :
-          <a
-            href="https://github.com/TarekDjaker"
-            target="_blank"
-            rel="noopener"
-            >github.com/TarekDjaker</a
-          >
-        </li>
-      </ul>
-    </section>
+      <section id="publications" class="pubs">
+        <h2>Publications / Travaux</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Discrepancy principle for kernelized spectral filters</h3>
+            <p>Bilan de lecture : arrêt précoce, régularisation spectrale, garanties d’erreur.</p>
+            <p><a class="chip" href="#" target="_blank" rel="noopener">Notes</a></p>
+          </article>
+          <article class="card">
+            <h3>Early stopping for Boosting (projet de recherche M2)</h3>
+            <p>Généralisation de la règle de discrépance au boosting ; preuve esquissée.</p>
+            <p><a class="chip" href="#" target="_blank" rel="noopener">Mémo</a></p>
+          </article>
+          <article class="card">
+            <h3>Energy price delta Spot–Intraday</h3>
+            <p>Modèles supervisés, features énergie, objectifs régression/classification.</p>
+            <p><a class="chip" href="#" target="_blank" rel="noopener">Repo</a></p>
+          </article>
+        </div>
+      </section>
 
-    <footer>
-      <p>&copy; 2025 Tarek DJAKER. Tous droits réservés.</p>
-    </footer>
+      <section id="projects" class="projects">
+        <h2>Projets</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>mysupertools (Python)</h3>
+            <p>Petit package avec utilitaires ML/stats. Packaging, tests, CI.</p>
+            <p><a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a></p>
+          </article>
+          <article class="card">
+            <h3>Prédiction séries temporelles (énergie)</h3>
+            <p>Pré-traitement robuste, features météo/production, modèles linéaires & arbres.</p>
+            <p><a class="chip" href="#" target="_blank" rel="noopener">Repo</a></p>
+          </article>
+        </div>
+      </section>
 
-    <!-- Script pour le menu hamburger -->
+      <footer class="foot">
+        © <span id="y"></span> Tarek DJAKER — <a href="mailto:djakertarek@gmail.com">djakertarek@gmail.com</a>
+      </footer>
+    </main>
     <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      // Fonction d’ouverture/fermeture du menu sur mobile
-      hamburger.addEventListener("click", () => {
-        navLinks.classList.toggle("open");
-        hamburger.classList.toggle("open");
-      });
-      // Permet aussi de fermer le menu au clavier (accessibilité)
-      hamburger.addEventListener("keypress", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          navLinks.classList.toggle("open");
-          hamburger.classList.toggle("open");
-        }
-      });
+      document.getElementById('y').textContent = new Date().getFullYear();
     </script>
   </body>
 </html>

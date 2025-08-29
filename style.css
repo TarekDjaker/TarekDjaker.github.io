@@ -1,244 +1,52 @@
-/*
-  Feuille de style pour le portfolio de Tarek DJAKER.
-  Ce fichier définit la typographie, les couleurs et la disposition des
-  différents éléments de la page afin d'obtenir un rendu clair,
-  moderne et réactif.  N'hésitez pas à adapter les valeurs (polices,
-  couleurs, marges) selon vos goûts personnels ou votre charte
-  graphique.
-*/
+/* Minimal, clean layout inspired by simple academic pages */
+:root{
+  --bg:#ffffff;
+  --text:#1f2937;
+  --muted:#4b5563;
+  --chip:#111827;
+  --chip-bg:#e5e7eb;
+  --brand:#0b7bd1;
+  --accent:#ffd300;
+  --card:#fafafa;
+  --shadow:0 6px 24px -8px rgba(0,0,0,.15);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:980px;margin:56px auto;padding:0 24px}
+h1{font-size:clamp(28px,4vw,44px);line-height:1.2;margin:0 0 12px}
+h2{font-size:clamp(22px,3vw,28px);margin:48px 0 16px}
+h3{margin:0 0 8px;font-size:18px}
+.lead{color:var(--muted)}
+a{color:var(--brand);text-decoration:underline}
+a:hover{opacity:.9}
 
-/* Réinitialisation de base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.intro{display:grid;grid-template-columns:220px 1fr;gap:36px;align-items:center;margin:24px 0 16px}
+@media (max-width:740px){.intro{grid-template-columns:1fr;gap:18px;text-align:center} .portrait-wrap{margin:0 auto}}
+
+.portrait-wrap{
+  width:220px;height:220px;position:relative;
+  border-radius:28% 72% 62% 38% / 36% 44% 56% 64%; /* blob */
+  background:#c1624f; /* warm blob color */
+  display:grid;place-items:center;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.portrait-wrap img{
+  width:210px;height:210px;object-fit:cover;border-radius:50%;filter:contrast(1.05) saturate(1.02);
 }
 
-body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #fff;
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.chip{
+  display:inline-block;background:var(--chip-bg);color:var(--chip);padding:.5rem .8rem;
+  border-radius:10px;text-decoration:none;border:1px solid #e5e7eb;font-weight:600
+}
+.btn{
+  display:inline-block;background:var(--brand);color:#fff;padding:.6rem 1rem;border-radius:10px;text-decoration:none;font-weight:700;
+  box-shadow:var(--shadow);border:0
 }
 
-/* Barre de navigation */
-header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #007acc;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-}
-
-.nav-links li {
-  margin-left: 2rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: #007acc;
-}
-
-/* Menu hamburger pour mobile */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.hamburger span {
-  height: 3px;
-  width: 25px;
-  background: #333;
-  margin: 4px 0;
-  transition: all 0.3s ease;
-}
-
-/* Section hero */
-.hero {
-  background: linear-gradient(135deg, #007acc, #003f7d);
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-  text-align: center;
-  padding: 2rem;
-}
-
-.hero-content h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.hero-content h1 span {
-  color: #ffd700;
-}
-
-.hero-content p {
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.btn {
-  display: inline-block;
-  margin-top: 1.5rem;
-  padding: 0.75rem 1.5rem;
-  background: #ffd700;
-  color: #003f7d;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.btn:hover {
-  background: #e6c200;
-  color: #00264d;
-}
-
-/* Sections génériques */
-section {
-  max-width: 1100px;
-  margin: 4rem auto;
-  padding: 0 1rem;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #003f7d;
-  border-bottom: 2px solid #007acc;
-  display: inline-block;
-  padding-bottom: 0.25rem;
-}
-
-/* Liste des compétences */
-.skills-list {
-  list-style: none;
-}
-
-.skills-list li {
-  background: #f5f5f5;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
-  border-left: 4px solid #007acc;
-  border-radius: 2px;
-}
-
-.skill-name {
-  font-weight: bold;
-  margin-right: 0.5rem;
-}
-
-/* Grille de projets */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.project-card {
-  background: #f5f5f5;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.project-card h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  color: #003f7d;
-}
-
-.project-card p {
-  margin-bottom: 1rem;
-}
-
-/* Liste de contact */
-.contact-list {
-  list-style: none;
-}
-
-.contact-list li {
-  margin-bottom: 0.5rem;
-}
-
-.contact-list a {
-  color: #007acc;
-  text-decoration: none;
-}
-
-.contact-list a:hover {
-  text-decoration: underline;
-}
-
-/* Pied de page */
-footer {
-  background: #003f7d;
-  color: #ffffff;
-  text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
-}
-
-/* Responsivité */
-@media (max-width: 768px) {
-  .nav-links {
-    position: absolute;
-    right: 0;
-    top: 60px;
-    flex-direction: column;
-    background: #ffffff;
-    width: 100%;
-    display: none;
-    padding: 1rem 0;
-  }
-
-  .nav-links.open {
-    display: flex;
-  }
-
-  .nav-links li {
-    margin: 0.5rem 0;
-    text-align: center;
-  }
-
-  .hamburger {
-    display: flex;
-  }
-
-  .hero {
-    height: 70vh;
-  }
-}
+.pubs,.projects{margin-top:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);padding:16px;border-radius:14px;box-shadow:var(--shadow)}
+.foot{margin:56px 0 24px;color:var(--muted);text-align:center}
+.foot a{color:inherit}
