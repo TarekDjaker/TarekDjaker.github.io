@@ -1,84 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tarek DJAKER — Data Scientist</title>
-    <meta name="description" content="Portfolio de Tarek DJAKER, Data Scientist en statistiques, apprentissage automatique et optimisation.">
-    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="style.css"></noscript>
-    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  </head>
-  <body>
-    <main class="container">
-      <section class="intro">
-        <div class="portrait-wrap">
-          <img src="assets/portrait.png" alt="Portrait de Tarek DJAKER" width="340" height="340" loading="eager">
-        </div>
-        <div class="intro-text">
-          <h1>Tarek‑Jan Djaker</h1>
-          <p class="lead">
-            ✨ Étudiant M2 en <strong>statistiques & machine learning</strong> (Sorbonne),
-            passionné par l’optimisation, l’apprentissage statistique et l’énergie.
-          </p>
-          <p>
-            Actuellement en recherche d’un stage/emploi en data science/ML.
-            Mes sujets du moment : <em>early stopping</em>, méthodes à noyaux, boosting,
-            séries temporelles énergie.
-          </p>
-          <nav class="cta">
-            <a class="chip" href="mailto:djakertarek@gmail.com">Email</a>
-            <a class="chip" href="https://www.linkedin.com/in/tarek-djaker" target="_blank" rel="noopener">LinkedIn</a>
-            <a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a>
-            <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
-            <a class="btn"  href="assets/CV_Tarek_Djaker.pdf" target="_blank" rel="noopener">Mon CV</a>
-          </nav>
-        </div>
-      </section>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarek DJAKER · Data Scientist</title>
+  <meta name="description" content="Portfolio de Tarek DJAKER, Data Scientist en statistiques, machine learning et optimisation, énergie.">
+  <meta property="og:title" content="Tarek DJAKER · Data Scientist"/>
+  <meta property="og:description" content="Portfolio, publications, projets et compétences de Tarek DJAKER."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tarekdjaker.github.io"/>
+  <meta property="og:image" content="assets/portrait.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Tarek DJAKER · Data Scientist"/>
+  <meta name="twitter:description" content="Portfolio, publications, projets et compétences de Tarek DJAKER."/>
+  <meta name="twitter:image" content="assets/portrait.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <script defer src="darkmode.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <button id="darkmode-toggle" title="Basculer mode sombre">🌙</button>
+    </header>
+    <section class="intro">
+      <div class="portrait-wrap">
+        <img src="assets/portrait.png" alt="Portrait de Tarek DJAKER" width="220" height="220" loading="eager">
+      </div>
+      <div class="intro-text">
+        <h1>Tarek&nbsp;DJAKER</h1>
+        <p class="lead">Étudiant M2 en <strong>statistiques & machine learning</strong> (Sorbonne)<br>
+          Passionné par l’optimisation, l’apprentissage statistique et l’énergie.<br>
+          Actuellement en recherche de stage/data scientist.</p>
+        <nav class="cta">
+          <a class="chip" href="mailto:djakertarek@gmail.com">Email</a>
+          <a class="chip" href="https://www.linkedin.com/in/tarek-djaker" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a>
+          <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
+          <a class="btn" href="assets/CV_Tarek_Djaker.pdf" target="_blank" rel="noopener">Mon&nbsp;CV</a>
+        </nav>
+      </div>
+    </section>
 
-      <section id="publications" class="pubs">
-        <h2>Publications / Travaux</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Discrepancy principle for kernelized spectral filters</h3>
-            <p>Bilan de lecture : arrêt précoce, régularisation spectrale, garanties d’erreur.</p>
-            <p><a class="chip" href="#" target="_blank" rel="noopener">Notes</a></p>
-          </article>
-          <article class="card">
-            <h3>Early stopping for Boosting (projet de recherche M2)</h3>
-            <p>Généralisation de la règle de discrépance au boosting ; preuve esquissée.</p>
-            <p><a class="chip" href="#" target="_blank" rel="noopener">Mémo</a></p>
-          </article>
-          <article class="card">
-            <h3>Energy price delta Spot–Intraday</h3>
-            <p>Modèles supervisés, features énergie, objectifs régression/classification.</p>
-            <p><a class="chip" href="#" target="_blank" rel="noopener">Repo</a></p>
-          </article>
-        </div>
-      </section>
+    <section class="skills">
+      <h2>Compétences</h2>
+      <ul class="skills-list">
+        <li>Python</li>
+        <li>Machine Learning</li>
+        <li>Statistiques</li>
+        <li>Énergie</li>
+        <li>Data&nbsp;Viz</li>
+        <li>Optimisation</li>
+      </ul>
+    </section>
 
-      <section id="projects" class="projects">
-        <h2>Projets</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>mysupertools (Python)</h3>
-            <p>Petit package avec utilitaires ML/stats. Packaging, tests, CI.</p>
-            <p><a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a></p>
-          </article>
-          <article class="card">
-            <h3>Prédiction séries temporelles (énergie)</h3>
-            <p>Pré-traitement robuste, features météo/production, modèles linéaires & arbres.</p>
-            <p><a class="chip" href="#" target="_blank" rel="noopener">Repo</a></p>
-          </article>
-        </div>
-      </section>
+    <section id="publications" class="pubs">
+      <h2>Publications / Travaux</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Discrépancy principle for kernelized spectral filters</h3>
+          <p>Bilan de lecture : arrêt précoce, régularisation spectrale, garanties d’erreur.</p>
+          <p><a class="chip" href="#">Notes</a></p>
+        </article>
+        <article class="card">
+          <h3>Early stopping for Boosting (projet de recherche M2)</h3>
+          <p>Généralisation, régularisation de la règle de dis... (suite sur demande)</p>
+          <p><a class="chip" href="#">Mémo</a></p>
+        </article>
+        <article class="card">
+          <h3>Energy price delta Spot–Intraday</h3>
+          <p>Modèles supervisés, features énergie, objets régression/classification.</p>
+          <p><a class="chip" href="#">Repo</a></p>
+        </article>
+      </div>
+    </section>
 
-      <footer class="foot">
-        © <span id="y"></span> Tarek DJAKER — <a href="mailto:djakertarek@gmail.com">djakertarek@gmail.com</a>
-      </footer>
-    </main>
-    <script>
-      document.getElementById('y').textContent = new Date().getFullYear();
-    </script>
-  </body>
+    <section id="projects" class="projects">
+      <h2>Projets</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>mysupertools (Python)</h3>
+          <p>Petit package avec utilitaires ML/stats. Packaging, tests, CI.</p>
+          <p><a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a></p>
+        </article>
+        <article class="card">
+          <h3>Prédiction séries temporelles (énergie)</h3>
+          <p>Pré-traitement robuste, modèles linéaires & arbres.</p>
+          <p><a class="chip" href="#">Repo</a></p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="foot">
+      © <span id="year"></span> Tarek DJAKER · <a href="mailto:djakertarek@gmail.com">djakertarek@gmail.com</a>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>
