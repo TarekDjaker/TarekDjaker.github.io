@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -10,8 +10,17 @@
   <link rel="preload" as="style" href="style.css" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="style.css"></noscript>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="theme-icon sun-icon">☀️</span>
+        <span class="theme-icon moon-icon">🌙</span>
+      </button>
+    </div>
+  </nav>
+
   <main class="container">
-    <section class="intro">
+    <section class="intro reveal">
       <div class="portrait-wrap">
         <picture>
           <source srcset="portrait_blob_480.webp 480w, portrait_blob_720.webp 720w" sizes="(max-width: 760px) 60vw, 340px" type="image/webp">
@@ -20,52 +29,132 @@
       </div>
       <div class="intro-text">
         <h1>Tarek DJAKER</h1>
-        <p class="lead">Étudiant M2 <strong>Statistiques & Machine Learning</strong> (Sorbonne). Intérêt pour l’optimisation, l’apprentissage statistique, les méthodes à noyaux et l’énergie.</p>
-        <p>Recherche d’un stage/emploi en data science/ML. Sujets : early stopping, boosting, séries temporelles énergie.</p>
+        <p class="lead">Étudiant M2 <strong>Statistiques & Machine Learning</strong> (Sorbonne). Intérêt pour l'optimisation, l'apprentissage statistique, les méthodes à noyaux et l'énergie.</p>
+        <p>Recherche d'un stage/emploi en data science/ML. Sujets : early stopping, boosting, séries temporelles énergie.</p>
         <nav class="cta">
           <a class="chip" href="mailto:djakertarek@gmail.com">Email</a>
           <a class="chip" href="https://www.linkedin.com/in/tarek-djaker" target="_blank" rel="noopener">LinkedIn</a>
           <a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a>
           <a class="chip" href="#" target="_blank" rel="noopener">Scholar</a>
-          <a class="btn"  href="CV_Tarek_Djaker.pdf" target="_blank" rel="noopener">Mon CV</a>
+          <a class="btn premium-btn" href="CV_Tarek_Djaker.pdf" target="_blank" rel="noopener">Mon CV</a>
         </nav>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section what-i-bring reveal">
+      <h2>Ce que je peux apporter à votre équipe</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-icon">🧠</div>
+          <h3>Expertise ML/Stats</h3>
+          <p>Maîtrise avancée des algorithmes d'apprentissage, optimisation et méthodes statistiques modernes.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">⚡</div>
+          <h3>Polyvalence Technique</h3>
+          <p>Python, R, SQL, Git, Docker. Capacité d'adaptation rapide aux nouveaux outils et frameworks.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🎯</div>
+          <h3>Résolution de Problèmes</h3>
+          <p>Approche analytique rigoureuse pour transformer les défis business en solutions data-driven.</p>
+        </div>
+        <div class="skill-card">
+          <div class="skill-icon">🚀</div>
+          <h3>Innovation Continue</h3>
+          <p>Veille technologique active et capacité à implémenter les dernières avancées en ML.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-stats reveal">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">2+</div>
+          <div class="stat-label">Années d'études ML</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Projets réalisés</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Technologies maîtrisées</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal">
       <h2>Publications / Notes</h2>
       <div class="grid">
-        <article class="card">
+        <article class="card project-card">
           <h3>Discrepancy principle for kernelized spectral filters</h3>
-          <p>Notes de lecture (arrêt précoce, filtres spectraux, garanties d’erreur).</p>
-          <p><a class="chip" href="#" target="_blank" rel="noopener">PDF</a></p>
+          <p>Notes de lecture (arrêt précoce, filtres spectraux, garanties d'erreur).</p>
+          <a class="chip" href="#" rel="noopener" target="_blank">PDF</a>
         </article>
-        <article class="card">
+        <article class="card project-card">
           <h3>Early stopping for Boosting</h3>
           <p>Esquisse de preuve — règle de discrépance généralisée au boosting.</p>
-          <p><a class="chip" href="#" target="_blank" rel="noopener">Mémo</a></p>
+          <a class="chip" href="#" rel="noopener" target="_blank">Mémo</a>
         </article>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section reveal">
       <h2>Projets</h2>
       <div class="grid">
-        <article class="card">
-          <h3>Énergie : delta Spot–Intraday</h3>
+        <article class="card project-card">
+          <h3>Énergie : delta Spot–Intraday</h3>
           <p>Modélisation supervisée, features énergie, gestion des valeurs manquantes et outliers.</p>
-          <p><a class="chip" href="#" target="_blank" rel="noopener">Repo</a></p>
+          <a class="chip" href="#" rel="noopener" target="_blank">Repo</a>
         </article>
-        <article class="card">
+        <article class="card project-card">
           <h3>mysupertools (Python)</h3>
-          <p>Mini‑package d’outils ML/stats : packaging, tests, CI.</p>
-          <p><a class="chip" href="https://github.com/TarekDjaker" target="_blank" rel="noopener">GitHub</a></p>
+          <p>Mini‑package d'outils ML/stats : packaging, tests, CI.</p>
+          <a class="chip" href="https://github.com/TarekDjaker" rel="noopener" target="_blank">GitHub</a>
         </article>
       </div>
     </section>
 
     <footer class="foot">© <span id="y"></span> Tarek DJAKER — <a href="mailto:djakertarek@gmail.com">djakertarek@gmail.com</a></footer>
   </main>
-  <script>document.getElementById('y').textContent=(new Date()).getFullYear();</script>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    body.classList.add(savedTheme + '-theme');
+    
+    themeToggle.addEventListener('click', () => {
+      if (body.classList.contains('light-theme')) {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+    
+    revealElements.forEach(element => {
+      revealObserver.observe(element);
+    });
+    
+    document.getElementById('y').textContent = (new Date()).getFullYear();
+  </script>
 </body>
 </html>
