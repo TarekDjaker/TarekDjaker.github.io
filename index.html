@@ -1,245 +1,145 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tarek Djaker – Portfolio</title>
-
-  <!-- Bootstrap & animations -->
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <!-- Styles principaux -->
-  <style>
-    /*================ Thèmes =================*/
-    :root{
-      --bg:#ffffff;         /* fond clair */
-      --text:#222;          /* texte clair */
-      --accent:#0d6efd;     /* couleur principale */
-    }
-    body.dark-theme{
-      --bg:#0b0b0d;         /* fond sombre */
-      --text:#e5e5e5;       /* texte sombre */
-      --accent:#5da8ff;
-    }
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:"Segoe UI",sans-serif;
-      transition:background .3s,color .3s;
-    }
-
-    /*========== Section : Hero ==========*/
-    #hero{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      background:linear-gradient(135deg,var(--accent),transparent);
-    }
-
-    /*========== Section : Timeline ==========*/
-    .timeline{
-      position:relative;
-      padding-left:2rem;
-      border-left:2px solid var(--accent);
-    }
-    .timeline-item{
-      margin-bottom:2rem;
-    }
-    .timeline-item::before{
-      content:"";
-      position:absolute;
-      left:-9px;
-      top:0.4rem;
-      width:14px;height:14px;
-      border-radius:50%;
-      background:var(--accent);
-    }
-
-    /*========== Section : Galerie ==========*/
-    .gallery img{
-      width:100%;
-      border-radius:0.5rem;
-      transition:transform .3s;
-    }
-    .gallery img:hover{
-      transform:scale(1.05);
-    }
-
-    /*========== Section : Compétences ==========*/
-    .skill-bar{
-      height:8px;
-      border-radius:4px;
-      background:#ced4da;
-      overflow:hidden;
-    }
-    .skill-bar-fill{
-      height:100%;
-      width:0;
-      background:var(--accent);
-      transition:width 1s;
-    }
-
-    /* Responsive */
-    @media (max-width:576px){
-      h1{font-size:2rem;}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarek Djaker - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+<body>
 
-<body class="light-theme">
-<!-- Script de détection du thème AVANT rendu -->
-<script>
-  (() => {
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (saved === 'dark' || (!saved && prefersDark)) {
-      document.body.classList.replace('light-theme', 'dark-theme');
-    }
-  })();
-</script>
+    <header class="header">
+        <div class="header-content">
+            <div class="profile-photo-container">
+                <img src="tarek2.jpg" alt="Photo de Tarek Djaker" class="profile-photo">
+            </div>
+            <div class="bio">
+                <h1>Tarek Djaker</h1>
+                <p>Chercheur en apprentissage automatique et biologie computationnelle</p>
+                <div class="social-links">
+                    <a href="mailto:votre-email@example.com" class="social-btn" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://linkedin.com/in/votre-profil" class="social-btn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/TarekDjaker" class="social-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://twitter.com/votre-twitter" class="social-btn" title="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<!--========== Barre de navigation ==========-->
-<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="#">Tarek Djaker</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link" href="#about">À propos</a></li>
-        <li class="nav-item"><a class="nav-link" href="#timeline">Parcours</a></li>
-        <li class="nav-item"><a class="nav-link" href="#projects">Projets</a></li>
-        <li class="nav-item"><a class="nav-link" href="#skills">Compétences</a></li>
-        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-        <li class="nav-item">
-          <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3">
-            🌙 / ☀️
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <main class="main-content">
 
-<!--========== Section : Hero ==========-->
-<header id="hero" class="container-fluid">
-  <div class="row">
-    <div class="col-12 animate__animated animate__fadeIn">
-      <h1 class="display-4 fw-bold">Bienvenue, je suis Tarek Djaker</h1>
-      <p class="lead">[Votre slogan ou spécialité]</p>
-      <a href="#projects" class="btn btn-primary btn-lg mt-3">Voir mes projets</a>
-    </div>
-  </div>
-</header>
+        <section class="section about-me">
+            <h2>À propos de moi</h2>
+            <p>
+                Je suis un chercheur passionné et rigoureux, spécialisé dans l'apprentissage automatique et la biologie computationnelle. Mon travail se concentre sur l'application de techniques de pointe comme le transport optimal pour analyser des données complexes et à grande échelle en génomique. Je suis motivé par la découverte de solutions élégantes qui comblent le fossé entre la théorie mathématique et les problèmes biologiques du monde réel.
+            </p>
+        </section>
 
-<!--========== Section : À propos ==========-->
-<section id="about" class="container py-5">
-  <h2 class="mb-4">À propos</h2>
-  <p>[Résumé de profil professionnel – à compléter]</p>
-</section>
+        <section class="section publications">
+            <h2>Publications et Projets</h2>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Apprentissage de paysages de destinées cellulaires à partir de transcriptomique spatiale à l'aide de Fused Gromov-Wasserstein</h3>
+                        <p class="meta"><em>bioRxiv</em>, 2024</p>
+                        <p>Travail de recherche se concentrant sur le transport optimal pour la biologie computationnelle.</p>
+                        <a href="https://www.biorxiv.org/content/10.1101/2024.07.26.605241v1" class="btn-project">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/stories" class="btn-project">Code</a>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Intégration de données multi-omiques à l'aide de Mowgli</h3>
+                        <p class="meta"><em>Nature Communications</em>, 2023</p>
+                        <p>J'ai mis en place des modèles pour l'apprentissage à partir de différentes modalités multi-omiques unicellulaires.</p>
+                        <a href="https://www.nature.com/articles/s41467-023-43019-2" class="btn-project">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/Mowgli" class="btn-project">Code</a>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Apprentissage non supervisé de métrique spatiale avec les vecteurs singuliers de Wasserstein</h3>
+                        <p class="meta"><em>International Conference on Machine Learning (ICML)</em>, 2022</p>
+                        <p>J'ai proposé une méthode d'apprentissage non supervisée de métrique spatiale.</p>
+                        <a href="https://proceedings.mlr.press/v162/huizing22a/huizing22a.pdf" class="btn-project">Lire l'article</a>
+                        <a href="https://github.com/CSDUlm/wsingular" class="btn-project">Code</a>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Le transport optimal améliore l'inférence de la similarité cellule-cellule</h3>
+                        <p class="meta"><em>Bioinformatics</em>, 2022</p>
+                        <p>J'ai proposé une nouvelle méthode d'analyse des données d'omiques monocellulaires utilisant des distances de transport optimal.</p>
+                        <a href="https://academic.oup.com/bioinformatics/article/38/8/2169/6528312" class="btn-project">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/OT-scOmics" class="btn-project">Code</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section skills-section">
+            <h2>Compétences</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-label">Machine Learning</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="90"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-label">Python</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="95"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-label">Mathématiques</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="85"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-label">Biologie Computationnelle</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="80"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-label">Développement Logiciel</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="75"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-label">Rédaction Scientifique</div>
+                    <div class="skill-bar-container"><div class="skill-bar" data-level="85"></div></div>
+                </div>
+            </div>
+        </section>
 
-<!--========== Section : Timeline (éducation / expérience) ==========-->
-<section id="timeline" class="container py-5">
-  <h2 class="mb-4">Parcours</h2>
-  <div class="timeline">
-    <!-- Exemple d’élément de timeline -->
-    <div class="timeline-item">
-      <h5>2023 – Présent · Titre/Poste</h5>
-      <p class="text-muted">Entreprise / École</p>
-      <p>Brève description des missions ou réalisations.</p>
-    </div>
-    <!-- Dupliquer ce bloc pour chaque événement -->
-  </div>
-</section>
+        <section class="section education">
+            <h2>Éducation</h2>
+            <div class="education-container">
+                <div class="education-item">
+                    <h3>PhD en biologie computationnelle</h3>
+                    <p>Institut Pasteur & ENS PSL | 2020-2024</p>
+                </div>
+                <div class="education-item">
+                    <h3>M2 Data Science</h3>
+                    <p>Institut Polytechnique de Paris | 2019-2020</p>
+                </div>
+                <div class="education-item">
+                    <h3>Diplôme d'ingénieur</h3>
+                    <p>Télécom Paris | 2017-2020</p>
+                </div>
+                 <div class="education-item">
+                    <h3>MPSI-MP*</h3>
+                    <p>Classe préparatoire Masséna, Nice | 2015-2017</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
 
-<!--========== Section : Projets (mini-galerie) ==========-->
-<section id="projects" class="container py-5">
-  <h2 class="mb-4">Projets</h2>
-  <div class="row g-4 gallery">
-    <!-- Exemple de projet -->
-    <div class="col-sm-6 col-lg-4">
-      <a href="[lien complet projet]" target="_blank">
-        <img src="[img/miniature1.jpg]" alt="Projet 1">
-      </a>
-      <h6 class="mt-2">Titre projet</h6>
-    </div>
-    <!-- Dupliquer pour chaque projet -->
-  </div>
-</section>
+    <footer class="footer">
+        <p>&copy; 2024 Tarek Djaker. Tous droits réservés.</p>
+    </footer>
 
-<!--========== Section : Compétences (barres interactives) ==========-->
-<section id="skills" class="container py-5">
-  <h2 class="mb-4">Compétences</h2>
-
-  <!-- Exemple de compétence -->
-  <div class="mb-4">
-    <span>HTML / CSS</span>
-    <div class="skill-bar mt-1">
-      <div class="skill-bar-fill" data-level="90"></div>
-    </div>
-  </div>
-  <!-- Dupliquer pour chaque compétence -->
-</section>
-
-<!--========== Section : Publications & Réseaux ==========-->
-<section id="publications" class="container py-5">
-  <h2 class="mb-4">Publications</h2>
-  <ul>
-    <!-- Exemple de publication -->
-    <li>
-      <strong>Titre de la publication</strong>,
-      <em>Revue/Conférence</em>, Année.
-      <a href="[lien]" target="_blank">Lien</a>
-    </li>
-  </ul>
-
-  <h3 class="mt-5 mb-3">Réseaux</h3>
-  <p>
-    <a href="https://linkedin.com/in/..." target="_blank">LinkedIn</a> |
-    <a href="https://github.com/..." target="_blank">GitHub</a> |
-    <a href="https://twitter.com/..." target="_blank">Twitter</a>
-  </p>
-</section>
-
-<!--========== Section : Contact ==========-->
-<section id="contact" class="container py-5">
-  <h2 class="mb-4">Contact</h2>
-  <p>Vous pouvez me joindre à : <a href="mailto:[email]">[email]</a></p>
-</section>
-
-<!--========== Pied de page ==========-->
-<footer class="text-center py-4">
-  <small>&copy; 2024 Tarek Djaker. Tous droits réservés.</small>
-</footer>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  // Toggle manuel du thème
-  document.getElementById('themeToggle').addEventListener('click', () => {
-    document.body.classList.toggle('dark-theme');
-    const mode = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
-    localStorage.setItem('theme', mode);
-  });
-
-  // Animation progressive des barres de compétences
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const fill = entry.target;
-        fill.style.width = fill.dataset.level + '%';
-        observer.unobserve(fill);
-      }
-    });
-  }, {threshold: 0.6});
-
-  document.querySelectorAll('.skill-bar-fill').forEach(bar => observer.observe(bar));
-</script>
+    <script src="js/script.js"></script>
 </body>
 </html>
