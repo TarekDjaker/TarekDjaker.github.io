@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio de Projets - Tarek Djaker</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-simple">
+            <a href="../index.html" class="nav-back">← Retour au Portfolio Principal</a>
+            <h1>🚀 Portfolio de Projets</h1>
+        </nav>
+    </header>
+
+    <main class="main-content project-content">
+        <div class="container">
+            <iframe src="README.md" frameborder="0" width="100%" height="800px" 
+                    style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px;">
+                <p>Votre navigateur ne supporte pas les iframes. 
+                <a href="README.md">Cliquez ici pour voir le contenu</a></p>
+            </iframe>
+            
+            <div class="projects-navigation">
+                <h2>🗂️ Navigation Rapide</h2>
+                <div class="nav-grid">
+                    <a href="./machine-learning/" class="nav-card glassmorphism">
+                        <div class="nav-icon">🤖</div>
+                        <h3>Machine Learning</h3>
+                        <p>Algorithmes ML et transport optimal</p>
+                    </a>
+                    <a href="./statistics/" class="nav-card glassmorphism">
+                        <div class="nav-icon">📊</div>
+                        <h3>Statistiques</h3>
+                        <p>Analyses et modélisation bayésienne</p>
+                    </a>
+                    <a href="./deep-learning/" class="nav-card glassmorphism">
+                        <div class="nav-icon">🧠</div>
+                        <h3>Deep Learning</h3>
+                        <p>Réseaux de neurones avancés</p>
+                    </a>
+                    <a href="./data-visualization/" class="nav-card glassmorphism">
+                        <div class="nav-icon">📈</div>
+                        <h3>Data Visualization</h3>
+                        <p>Dashboards et storytelling</p>
+                    </a>
+                    <a href="./coding-interviews/" class="nav-card glassmorphism">
+                        <div class="nav-icon">💻</div>
+                        <h3>Coding Interviews</h3>
+                        <p>Algorithmes et préparation</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        .nav-simple {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-back {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-back:hover {
+            text-decoration: underline;
+        }
+        
+        .project-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .projects-navigation {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .projects-navigation h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .nav-card {
+            display: block;
+            padding: 1.5rem;
+            text-decoration: none;
+            text-align: center;
+            transition: var(--transition-smooth);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(67, 233, 123, 0.2);
+        }
+        
+        .nav-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .nav-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .nav-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+    </style>
+</body>
+</html>

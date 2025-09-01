@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning - Tarek Djaker Portfolio</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-simple">
+            <a href="../../index.html" class="nav-back">← Retour au Portfolio</a>
+            <h1>🤖 Machine Learning</h1>
+        </nav>
+    </header>
+
+    <main class="main-content project-content">
+        <div class="container">
+            <iframe src="README.md" frameborder="0" width="100%" height="800px" 
+                    style="background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px;">
+                <p>Votre navigateur ne supporte pas les iframes. 
+                <a href="README.md">Cliquez ici pour voir le contenu</a></p>
+            </iframe>
+        </div>
+    </main>
+
+    <style>
+        .nav-simple {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-back {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-back:hover {
+            text-decoration: underline;
+        }
+        
+        .project-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</body>
+</html>
