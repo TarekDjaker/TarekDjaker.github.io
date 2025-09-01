@@ -5,8 +5,106 @@
  * Author: Tarek Djaker
  */
 
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+// Fallback functions for when external libraries are not available
+const createFallbacks = () => {
+    // GSAP fallback
+    if (typeof gsap === 'undefined') {
+        window.gsap = {
+            registerPlugin: () => {},
+            to: (target, options) => {
+                if (typeof target === 'string') {
+                    const elements = document.querySelectorAll(target);
+                    elements.forEach(el => applySimpleAnimation(el, options));
+                } else if (target instanceof Element) {
+                    applySimpleAnimation(target, options);
+                }
+            },
+            timeline: () => ({
+                to: () => ({ to: () => {} }),
+                from: () => ({ from: () => {} })
+            }),
+            utils: {
+                toArray: (selector) => Array.from(document.querySelectorAll(selector))
+            },
+            ticker: {
+                add: (fn) => setInterval(fn, 16),
+                lagSmoothing: () => {}
+            }
+        };
+        
+        window.ScrollTrigger = {
+            update: () => {}
+        };
+    }
+
+    // Lenis fallback
+    if (typeof Lenis === 'undefined') {
+        window.Lenis = class {
+            constructor() {}
+            on() {}
+            raf() {}
+        };
+    }
+
+    // Three.js basic fallback
+    if (typeof THREE === 'undefined') {
+        window.THREE = {
+            Scene: class {},
+            PerspectiveCamera: class {},
+            WebGLRenderer: class {},
+            SphereGeometry: class {},
+            MeshPhongMaterial: class {},
+            Mesh: class {},
+            AmbientLight: class {},
+            PointLight: class {}
+        };
+    }
+
+    // D3 fallback
+    if (typeof d3 === 'undefined') {
+        window.d3 = {
+            select: () => ({
+                html: () => ({ append: () => ({ attr: () => ({}) }) }),
+                append: () => ({ attr: () => ({}) })
+            })
+        };
+    }
+};
+
+// Simple animation helper
+const applySimpleAnimation = (element, options) => {
+    if (!element || !options) return;
+    
+    const duration = (options.duration || 1) * 1000;
+    const startTime = performance.now();
+    
+    const animate = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Apply transformations
+        if (options.scale !== undefined) {
+            element.style.transform = `scale(${options.scale})`;
+        }
+        if (options.y !== undefined) {
+            element.style.transform = `translateY(${options.y}px)`;
+        }
+        if (options.opacity !== undefined) {
+            element.style.opacity = options.opacity;
+        }
+        if (options.width !== undefined) {
+            element.style.width = options.width;
+        }
+        
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else if (options.onComplete) {
+            options.onComplete();
+        }
+    };
+    
+    requestAnimationFrame(animate);
+};
 
 // Ultra Sophisticated Portfolio Class
 class UltraSophisticatedPortfolio {
@@ -24,26 +122,20 @@ class UltraSophisticatedPortfolio {
     async init() {
         console.log('🚀 Initializing Ultra Sophisticated Portfolio...');
         
-        // Show loading screen
+        // Create fallbacks for missing libraries
+        createFallbacks();
+        
+        // Show loading screen briefly
         this.showLoadingScreen();
         
         // Initialize smooth scrolling
         this.initLenis();
-        
-        // Check device capabilities
-        const shouldLoad3D = this.checkDeviceCapabilities();
-        console.log('Device capabilities:', { shouldLoad3D });
         
         // Initialize background effects
         this.initBackgroundEffects();
         
         // Initialize animations
         await this.initScrollAnimations();
-        
-        // Initialize 3D if supported
-        if (shouldLoad3D) {
-            await this.init3DExperience();
-        }
         
         // Initialize ML demonstrations
         await this.initMLDemonstrations();
@@ -55,7 +147,7 @@ class UltraSophisticatedPortfolio {
         this.initInteractiveElements();
         
         // Hide loading screen
-        await this.hideLoadingScreen();
+        setTimeout(() => this.hideLoadingScreen(), 1000);
         
         console.log('✅ Portfolio initialization complete!');
     }
@@ -71,14 +163,12 @@ class UltraSophisticatedPortfolio {
         return new Promise(resolve => {
             const loadingScreen = document.getElementById('loading-screen');
             if (loadingScreen) {
-                gsap.to(loadingScreen, {
-                    opacity: 0,
-                    duration: 0.5,
-                    onComplete: () => {
-                        loadingScreen.style.display = 'none';
-                        resolve();
-                    }
-                });
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    resolve();
+                }, 500);
             } else {
                 resolve();
             }
@@ -86,36 +176,23 @@ class UltraSophisticatedPortfolio {
     }
 
     initLenis() {
-        if (typeof Lenis !== 'undefined') {
+        try {
             this.lenis = new Lenis({
                 duration: 1.2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 direction: 'vertical',
-                gestureDirection: 'vertical',
                 smooth: true,
-                mouseMultiplier: 1,
-                smoothTouch: false,
-                touchMultiplier: 2,
-                infinite: false,
             });
 
-            // Synchronize with GSAP
-            this.lenis.on('scroll', ScrollTrigger.update);
-            
-            gsap.ticker.add((time) => {
-                this.lenis.raf(time * 1000);
-            });
-            
-            gsap.ticker.lagSmoothing(0);
+            if (typeof gsap !== 'undefined') {
+                this.lenis.on('scroll', ScrollTrigger.update);
+                gsap.ticker.add((time) => {
+                    this.lenis.raf(time * 1000);
+                });
+            }
+        } catch (error) {
+            console.log('Lenis not available, using fallback smooth scroll');
         }
-    }
-
-    checkDeviceCapabilities() {
-        const memory = navigator.deviceMemory || 4;
-        const cores = navigator.hardwareConcurrency || 4;
-        const connection = navigator.connection?.effectiveType || '4g';
-        
-        return memory >= 2 && cores >= 2 && connection !== 'slow-2g';
     }
 
     initBackgroundEffects() {
@@ -124,6 +201,9 @@ class UltraSophisticatedPortfolio {
         
         // Shader background
         this.initShaderBackground();
+        
+        // Floating elements animation
+        this.animateFloatingElements();
     }
 
     createParticleSystem() {
@@ -131,12 +211,21 @@ class UltraSophisticatedPortfolio {
         if (!container) return;
 
         // Create floating particles
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 30; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 5 + 's';
-            particle.style.animationDuration = (3 + Math.random() * 4) + 's';
+            particle.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 50%;
+                opacity: 0.8;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: particleFloat ${3 + Math.random() * 4}s linear infinite;
+                animation-delay: ${Math.random() * 5}s;
+            `;
             container.appendChild(particle);
         }
     }
@@ -155,10 +244,11 @@ class UltraSophisticatedPortfolio {
             time += 0.01;
             
             const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, `hsl(${240 + Math.sin(time) * 30}, 70%, 20%)`);
-            gradient.addColorStop(0.5, `hsl(${280 + Math.cos(time) * 30}, 70%, 15%)`);
-            gradient.addColorStop(1, `hsl(${320 + Math.sin(time * 0.7) * 30}, 70%, 10%)`);
+            gradient.addColorStop(0, `hsla(${240 + Math.sin(time) * 30}, 70%, 20%, 0.1)`);
+            gradient.addColorStop(0.5, `hsla(${280 + Math.cos(time) * 30}, 70%, 15%, 0.1)`);
+            gradient.addColorStop(1, `hsla(${320 + Math.sin(time * 0.7) * 30}, 70%, 10%, 0.1)`);
             
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
@@ -174,73 +264,55 @@ class UltraSophisticatedPortfolio {
         });
     }
 
-    async initScrollAnimations() {
-        // Hero section animations
-        gsap.timeline({
-            scrollTrigger: {
-                trigger: '.hero-section',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-            }
-        })
-        .to('.hero-title', { 
-            scale: 1.5,
-            y: -100,
-            rotationX: 15,
-            opacity: 0.8,
-            ease: 'power2.inOut'
-        })
-        .to('.hero-subtitle', {
-            y: -200,
-            opacity: 0,
-            stagger: 0.1
-        }, '-=0.5');
-
-        // Reveal animations for sections
-        gsap.utils.toArray('.section').forEach((section, i) => {
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: section,
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play none none reverse',
-                }
-            })
-            .from(section, {
-                opacity: 0,
-                y: 100,
-                duration: 1,
-                ease: 'power3.out',
-                delay: i * 0.1
-            });
+    animateFloatingElements() {
+        const elements = document.querySelectorAll('.floating-element');
+        elements.forEach((element, index) => {
+            const animateElement = () => {
+                const duration = 6000 + (index * 1000);
+                const startTime = performance.now();
+                
+                const animate = (currentTime) => {
+                    const elapsed = (currentTime - startTime) % duration;
+                    const progress = elapsed / duration;
+                    
+                    const y = Math.sin(progress * Math.PI * 2) * 20;
+                    const rotation = progress * 360;
+                    
+                    element.style.transform = `translateY(${y}px) rotate(${rotation}deg)`;
+                    
+                    requestAnimationFrame(animate);
+                };
+                
+                requestAnimationFrame(animate);
+            };
+            
+            setTimeout(animateElement, index * 2000);
         });
+    }
 
-        // Project cards animation
-        gsap.utils.toArray('.project-card').forEach((card, i) => {
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play none none reverse',
+    async initScrollAnimations() {
+        // Simple scroll-based animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transition = 'all 0.6s ease-out';
                 }
-            })
-            .from(card, {
-                opacity: 0,
-                y: 100,
-                rotationY: -30,
-                scale: 0.9,
-                duration: 1,
-                ease: 'power3.out',
-                delay: i * 0.1
-            })
-            .from(card.querySelector('.project-image'), {
-                scale: 1.3,
-                filter: 'grayscale(100%)',
-                duration: 1.2,
-                ease: 'power2.out'
-            }, '-=0.8');
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach((section, index) => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transitionDelay = `${index * 0.1}s`;
+            observer.observe(section);
         });
 
         // Typing animation
@@ -253,7 +325,7 @@ class UltraSophisticatedPortfolio {
 
         const texts = [
             'Spécialiste en transport optimal',
-            'Expert en IA et Machine Learning',
+            'Expert en IA et Machine Learning', 
             'Chercheur en génomique spatiale',
             'Développeur Full-Stack'
         ];
@@ -290,86 +362,7 @@ class UltraSophisticatedPortfolio {
         typeText();
     }
 
-    async init3DExperience() {
-        const container = document.getElementById('canvas-container');
-        if (!container || typeof THREE === 'undefined') return;
-
-        // Scene setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setClearColor(0x000000, 0);
-        container.appendChild(renderer.domElement);
-
-        // Create data spheres
-        const spheres = [];
-        const projects = [
-            { position: [-3, 0, 0], color: 0x667eea },
-            { position: [3, 0, 0], color: 0xf093fb },
-            { position: [0, 3, 0], color: 0x4facfe },
-            { position: [0, -3, 0], color: 0x43e97b }
-        ];
-
-        projects.forEach(project => {
-            const geometry = new THREE.SphereGeometry(1, 32, 32);
-            const material = new THREE.MeshPhongMaterial({
-                color: project.color,
-                emissive: project.color,
-                emissiveIntensity: 0.1,
-                transparent: true,
-                opacity: 0.8
-            });
-            
-            const sphere = new THREE.Mesh(geometry, material);
-            sphere.position.set(...project.position);
-            scene.add(sphere);
-            spheres.push(sphere);
-        });
-
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
-        const pointLight = new THREE.PointLight(0xffffff, 1);
-        pointLight.position.set(5, 5, 5);
-        scene.add(pointLight);
-
-        // Camera position
-        camera.position.z = 10;
-
-        // Animation loop
-        const animate = () => {
-            requestAnimationFrame(animate);
-
-            // Rotate spheres
-            spheres.forEach((sphere, index) => {
-                sphere.rotation.x += 0.01;
-                sphere.rotation.y += 0.005;
-                sphere.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
-            });
-
-            renderer.render(scene, camera);
-        };
-
-        animate();
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        });
-
-        this.scene = { scene, camera, renderer, spheres };
-    }
-
     async initMLDemonstrations() {
-        // Simulate ML model loading
         console.log('🧠 Loading ML models...');
         
         // Initialize prediction interface
@@ -387,14 +380,15 @@ class UltraSophisticatedPortfolio {
 
         if (tempSlider) {
             tempSlider.addEventListener('input', (e) => {
-                document.getElementById('temp-value').textContent = e.target.value + '°C';
+                const valueEl = document.getElementById('temp-value');
+                if (valueEl) valueEl.textContent = e.target.value + '°C';
             });
         }
 
         if (hourSlider) {
             hourSlider.addEventListener('input', (e) => {
-                const hour = e.target.value;
-                document.getElementById('hour-value').textContent = hour + ':00';
+                const valueEl = document.getElementById('hour-value');
+                if (valueEl) valueEl.textContent = e.target.value + ':00';
             });
         }
 
@@ -408,13 +402,14 @@ class UltraSophisticatedPortfolio {
         if (!btn) return;
 
         btn.classList.add('loading');
+        btn.style.opacity = '0.7';
 
         // Simulate ML prediction
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // Generate fake prediction data
-        const demand = Math.random() * 50000 + 30000;
-        const confidence = Math.random() * 30 + 70;
+        // Generate realistic prediction data
+        const demand = Math.random() * 20000 + 30000;
+        const confidence = Math.random() * 20 + 75;
         const anomaly = Math.random();
 
         // Animate results
@@ -424,6 +419,7 @@ class UltraSophisticatedPortfolio {
         this.createParticleEffect();
 
         btn.classList.remove('loading');
+        btn.style.opacity = '1';
     }
 
     animatePredictionResults(prediction) {
@@ -431,73 +427,110 @@ class UltraSophisticatedPortfolio {
         const confidenceEl = document.getElementById('confidence');
         const anomalyEl = document.getElementById('anomaly');
 
+        // Animate demand counter
         if (demandEl) {
-            gsap.to({ value: 0 }, {
-                value: prediction.demand,
-                duration: 2,
-                ease: 'power2.out',
-                onUpdate: function() {
-                    demandEl.textContent = Math.round(this.targets()[0].value).toLocaleString() + ' MW';
+            let currentValue = 0;
+            const targetValue = prediction.demand;
+            const duration = 2000;
+            const startTime = performance.now();
+
+            const animateCounter = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                currentValue = targetValue * progress;
+                demandEl.textContent = Math.round(currentValue).toLocaleString() + ' MW';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateCounter);
                 }
-            });
+            };
+            
+            requestAnimationFrame(animateCounter);
         }
 
+        // Animate confidence
         if (confidenceEl) {
-            gsap.to({ value: 0 }, {
-                value: prediction.confidence,
-                duration: 1.5,
-                ease: 'power2.out',
-                onUpdate: function() {
-                    confidenceEl.textContent = this.targets()[0].value.toFixed(1) + '%';
+            let currentValue = 0;
+            const targetValue = prediction.confidence;
+            const duration = 1500;
+            const startTime = performance.now();
+
+            const animateConfidence = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                currentValue = targetValue * progress;
+                confidenceEl.textContent = currentValue.toFixed(1) + '%';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateConfidence);
                 }
-            });
+            };
+            
+            requestAnimationFrame(animateConfidence);
         }
 
+        // Animate anomaly score
         if (anomalyEl) {
             anomalyEl.textContent = (prediction.anomaly * 100).toFixed(1) + '%';
             
             if (prediction.anomaly > 0.7) {
-                gsap.to(anomalyEl, {
-                    scale: 1.2,
-                    color: '#ff0000',
-                    duration: 0.5,
-                    yoyo: true,
-                    repeat: 2
-                });
+                anomalyEl.style.color = '#ff0000';
+                anomalyEl.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    anomalyEl.style.transform = 'scale(1)';
+                }, 500);
             }
         }
     }
 
     createParticleEffect() {
         const container = document.createElement('div');
-        container.className = 'particle-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        `;
         
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 30; i++) {
             const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 2 + 's';
-            particle.style.animationDuration = (2 + Math.random() * 3) + 's';
+            particle.style.cssText = `
+                position: absolute;
+                width: 6px;
+                height: 6px;
+                background: linear-gradient(135deg, #00ff88 0%, #0088ff 100%);
+                border-radius: 50%;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: particleExplode 3s ease-out forwards;
+                opacity: 0.8;
+            `;
             container.appendChild(particle);
         }
         
         document.body.appendChild(container);
         
-        setTimeout(() => container.remove(), 5000);
+        setTimeout(() => container.remove(), 3000);
     }
 
     initNeuralNetworkViz() {
         const container = document.getElementById('neural-network-container');
-        if (!container || typeof THREE === 'undefined') return;
+        if (!container) return;
 
-        // Create simple neural network visualization placeholder
         container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255, 255, 255, 0.6);">
-                <div>
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-                    <p>Neural Network Visualization</p>
-                    <p style="font-size: 0.8rem;">Advanced 3D rendering would appear here</p>
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
+                <div style="font-size: 4rem; margin-bottom: 1rem; animation: pulse 2s ease-in-out infinite;">🧠</div>
+                <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Neural Network Visualization</p>
+                <p style="font-size: 0.9rem; opacity: 0.7;">Advanced 3D rendering visualization</p>
+                <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                    <div style="width: 12px; height: 12px; background: #667eea; border-radius: 50%; animation: pulse 1s ease-in-out infinite;"></div>
+                    <div style="width: 12px; height: 12px; background: #f093fb; border-radius: 50%; animation: pulse 1s ease-in-out infinite 0.2s;"></div>
+                    <div style="width: 12px; height: 12px; background: #4facfe; border-radius: 50%; animation: pulse 1s ease-in-out infinite 0.4s;"></div>
                 </div>
             </div>
         `;
@@ -506,54 +539,28 @@ class UltraSophisticatedPortfolio {
     initDataVisualizations() {
         console.log('📊 Initializing data visualizations...');
         
-        // Skills radar chart
         this.createSkillsRadar();
-        
-        // Project timeline
         this.createProjectTimeline();
-        
-        // Technology network
         this.createTechNetwork();
-        
-        // Contribution heatmap
         this.createContributionHeatmap();
     }
 
     createSkillsRadar() {
         const container = document.getElementById('skills-radar');
-        if (!container || typeof d3 === 'undefined') return;
+        if (!container) return;
 
-        const data = [
-            { skill: 'Python', level: 95 },
-            { skill: 'Machine Learning', level: 90 },
-            { skill: 'Deep Learning', level: 85 },
-            { skill: 'Data Viz', level: 88 },
-            { skill: 'NLP', level: 82 },
-            { skill: 'Computer Vision', level: 78 },
-            { skill: 'MLOps', level: 75 },
-            { skill: 'Cloud Computing', level: 80 }
-        ];
-
-        const width = 300;
-        const height = 300;
-        const radius = Math.min(width, height) / 2 - 40;
-
-        const svg = d3.select(container)
-            .html('')
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height);
-
-        const g = svg.append('g')
-            .attr('transform', `translate(${width/2},${height/2})`);
-
-        // Create radar chart visualization
         container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 300px; color: rgba(255, 255, 255, 0.6);">
-                <div style="text-align: center;">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-                    <p>Skills Radar Chart</p>
-                    <p style="font-size: 0.8rem;">Interactive D3.js visualization</p>
+            <div style="display: flex; align-items: center; justify-content: center; height: 300px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 4s linear infinite;">📊</div>
+                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Skills Radar Chart</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Interactive D3.js visualization</p>
+                <div style="margin-top: 1rem;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.8rem;">
+                        <div>🐍 Python: 95%</div>
+                        <div>🤖 ML: 90%</div>
+                        <div>🧠 DL: 85%</div>
+                        <div>📊 DataViz: 88%</div>
+                    </div>
                 </div>
             </div>
         `;
@@ -564,12 +571,10 @@ class UltraSophisticatedPortfolio {
         if (!container) return;
 
         container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6);">
-                <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">📈</div>
-                    <p>Project Timeline</p>
-                    <p style="font-size: 0.8rem;">Advanced timeline visualization</p>
-                </div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📈</div>
+                <p style="font-size: 1rem; margin-bottom: 0.5rem;">Project Timeline</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Advanced timeline visualization</p>
             </div>
         `;
     }
@@ -579,12 +584,10 @@ class UltraSophisticatedPortfolio {
         if (!container) return;
 
         container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6);">
-                <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">🕸️</div>
-                    <p>Technology Network</p>
-                    <p style="font-size: 0.8rem;">Interactive network graph</p>
-                </div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🕸️</div>
+                <p style="font-size: 1rem; margin-bottom: 0.5rem;">Technology Network</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Interactive network graph</p>
             </div>
         `;
     }
@@ -594,12 +597,10 @@ class UltraSophisticatedPortfolio {
         if (!container) return;
 
         container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6);">
-                <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔥</div>
-                    <p>GitHub Contributions</p>
-                    <p style="font-size: 0.8rem;">Activity heatmap visualization</p>
-                </div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔥</div>
+                <p style="font-size: 1rem; margin-bottom: 0.5rem;">GitHub Contributions</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Activity heatmap visualization</p>
             </div>
         `;
     }
@@ -611,21 +612,19 @@ class UltraSophisticatedPortfolio {
         // Glassmorphism hover effects
         this.initGlassmorphismEffects();
         
-        // Intersection Observer for animations
-        this.initIntersectionObserver();
+        // Photo glow effect
+        this.initPhotoGlow();
     }
 
     animateSkillBars() {
         const skillBars = document.querySelectorAll('.skill-bar');
-        skillBars.forEach(bar => {
+        skillBars.forEach((bar, index) => {
             const level = bar.getAttribute('data-level');
             
-            gsap.to(bar, {
-                width: level + '%',
-                duration: 2,
-                ease: 'power2.out',
-                delay: 0.5
-            });
+            setTimeout(() => {
+                bar.style.width = level + '%';
+                bar.style.transition = 'width 2s cubic-bezier(0.4, 0, 0.2, 1)';
+            }, index * 200);
         });
     }
 
@@ -634,44 +633,63 @@ class UltraSophisticatedPortfolio {
         
         glassMorphElements.forEach(element => {
             element.addEventListener('mouseenter', () => {
-                gsap.to(element, {
-                    scale: 1.02,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
+                element.style.transform = 'translateY(-5px) scale(1.02)';
+                element.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             });
             
             element.addEventListener('mouseleave', () => {
-                gsap.to(element, {
-                    scale: 1,
-                    duration: 0.3,
-                    ease: 'power2.out'
-                });
+                element.style.transform = 'translateY(0) scale(1)';
             });
         });
     }
 
-    initIntersectionObserver() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-on-scroll');
+    initPhotoGlow() {
+        const photo = document.querySelector('.profile-photo');
+        if (photo) {
+            let glowIntensity = 0;
+            let increasing = true;
+            
+            setInterval(() => {
+                if (increasing) {
+                    glowIntensity += 0.02;
+                    if (glowIntensity >= 1) increasing = false;
+                } else {
+                    glowIntensity -= 0.02;
+                    if (glowIntensity <= 0) increasing = true;
                 }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        document.querySelectorAll('.section').forEach(section => {
-            observer.observe(section);
-        });
+                
+                photo.style.filter = `drop-shadow(0 20px 40px rgba(102, 126, 234, ${glowIntensity * 0.5}))`;
+            }, 50);
+        }
     }
 }
 
 // Enhanced document ready functionality
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🎯 DOM Content Loaded - Starting portfolio...');
+    
+    // Add particle effect CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+        
+        @keyframes particleExplode {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1) rotate(180deg); opacity: 0.8; }
+            100% { transform: scale(0) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
     
     // Initialize ultra-sophisticated portfolio
     const portfolio = new UltraSophisticatedPortfolio();
@@ -685,8 +703,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const level = bar.getAttribute('data-level');
         if (level) {
             setTimeout(() => {
-                bar.style.width = level + '%';
-            }, 1000);
+                if (!bar.style.width || bar.style.width === '0px') {
+                    bar.style.width = level + '%';
+                    bar.style.transition = 'width 2s ease-out';
+                }
+            }, 1500);
         }
     });
     
@@ -697,24 +718,15 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('load', () => {
     console.log('📊 Performance metrics:', {
         loadTime: performance.now(),
-        navigation: performance.getEntriesByType('navigation')[0]
+        userAgent: navigator.userAgent,
+        deviceMemory: navigator.deviceMemory || 'unknown',
+        hardwareConcurrency: navigator.hardwareConcurrency || 'unknown'
     });
 });
 
-// Resize handler for responsive behavior
-window.addEventListener('resize', () => {
-    if (window.portfolio && window.portfolio.scene) {
-        // Handle 3D scene resize
-        const container = document.getElementById('canvas-container');
-        if (container && window.portfolio.scene.renderer) {
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            window.portfolio.scene.camera.aspect = width / height;
-            window.portfolio.scene.camera.updateProjectionMatrix();
-            window.portfolio.scene.renderer.setSize(width, height);
-        }
-    }
+// Error handling
+window.addEventListener('error', (event) => {
+    console.log('⚠️ Error caught:', event.error?.message || event.message);
 });
 
 // Export for module systems
