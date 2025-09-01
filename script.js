@@ -743,13 +743,33 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🌟 Portfolio enhancement complete!');
 });
 
-// Performance monitoring
+// Performance monitoring and loading completion
 window.addEventListener('load', () => {
-    console.log('📊 Performance metrics:', {
-        loadTime: performance.now(),
-        userAgent: navigator.userAgent,
-        deviceMemory: navigator.deviceMemory || 'unknown',
-        hardwareConcurrency: navigator.hardwareConcurrency || 'unknown'
+    const loadTime = performance.now() - performanceMonitor.startTime;
+    performanceMonitor.mark('windowLoad');
+    
+    // Hide loading screen with a smooth fade
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }, 1000); // Show loading for at least 1 second for smooth UX
+    }
+    
+    console.log('📊 Performance metrics:', performanceMonitor.getMetrics());
+    
+    // Trigger reveal animations for visible elements
+    const revealElements = document.querySelectorAll('.reveal-text');
+    revealElements.forEach((el, index) => {
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+            el.style.transition = 'all 0.6s ease-out';
+        }, index * 100);
     });
 });
 
