@@ -3,131 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarek Djaker - Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Tarek Djaker - Ultra Sophisticated Portfolio</title>
+    <meta name="description" content="Portfolio ultra sophistiqué de Tarek Djaker - Chercheur en apprentissage automatique et biologie computationnelle">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Particle Background -->
+    <div id="particle-container"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Initialisation du portfolio...</h2>
+            <div class="loading-progress">
+                <div class="loading-bar"></div>
+            </div>
+        </div>
+    </div>
 
-    <header class="header">
+    <!-- Morphing Background Shader -->
+    <canvas id="shader-background"></canvas>
+
+    <header class="header hero-section">
         <div class="header-content">
             <div class="profile-photo-container">
-                <img src="tarek2.jpg" alt="Photo de Tarek Djaker" class="profile-photo">
+                <img src="portrait_circle.png" alt="Photo de Tarek Djaker" class="profile-photo">
+                <div class="photo-glow"></div>
             </div>
             <div class="bio">
-                <h1>Tarek Djaker</h1>
-                <p>Chercheur en apprentissage automatique et biologie computationnelle</p>
+                <h1 class="hero-title">Tarek Djaker</h1>
+                <p class="hero-subtitle reveal-text">Chercheur en apprentissage automatique et biologie computationnelle</p>
+                <div class="hero-subtitle reveal-text">
+                    <span class="typing-text">Spécialiste en transport optimal • IA • Génomique spatiale</span>
+                </div>
                 <div class="social-links">
-                    <a href="mailto:votre-email@example.com" class="social-btn" title="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://linkedin.com/in/votre-profil" class="social-btn" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/TarekDjaker" class="social-btn" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="https://twitter.com/votre-twitter" class="social-btn" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="mailto:votre-email@example.com" class="social-btn glassmorphism" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="https://linkedin.com/in/votre-profil" class="social-btn glassmorphism" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/TarekDjaker" class="social-btn glassmorphism" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://twitter.com/votre-twitter" class="social-btn glassmorphism" title="Twitter"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
+        </div>
+        
+        <!-- 3D Canvas Container -->
+        <div id="canvas-container" class="canvas-3d"></div>
+        
+        <!-- Floating particles -->
+        <div class="floating-elements">
+            <div class="floating-element" data-speed="0.5"></div>
+            <div class="floating-element" data-speed="0.8"></div>
+            <div class="floating-element" data-speed="0.3"></div>
         </div>
     </header>
 
     <main class="main-content">
 
-        <section class="section about-me">
+        <section class="section about-me glassmorphism">
             <h2>À propos de moi</h2>
-            <p>
+            <p class="reveal-text">
                 Je suis un chercheur passionné et rigoureux, spécialisé dans l'apprentissage automatique et la biologie computationnelle. Mon travail se concentre sur l'application de techniques de pointe comme le transport optimal pour analyser des données complexes et à grande échelle en génomique. Je suis motivé par la découverte de solutions élégantes qui comblent le fossé entre la théorie mathématique et les problèmes biologiques du monde réel.
             </p>
         </section>
 
-        <section class="section publications">
+        <!-- Interactive ML Demonstrations -->
+        <section class="section ml-showcase glassmorphism">
+            <h2>Démonstrations ML Interactives</h2>
+            <div id="ml-demonstrations-container">
+                <div class="ml-interface glassmorphism">
+                    <div class="ml-controls">
+                        <h3>Eco2Mix Energy Forecast Demo</h3>
+                        <div class="input-group">
+                            <label>Temperature (°C)</label>
+                            <input type="range" id="temp" min="-10" max="40" value="20">
+                            <span id="temp-value">20°C</span>
+                        </div>
+                        <div class="input-group">
+                            <label>Hour of Day</label>
+                            <input type="range" id="hour" min="0" max="23" value="12">
+                            <span id="hour-value">12:00</span>
+                        </div>
+                        <div class="input-group">
+                            <label>Season</label>
+                            <select id="season">
+                                <option value="spring">Spring</option>
+                                <option value="summer">Summer</option>
+                                <option value="autumn">Autumn</option>
+                                <option value="winter">Winter</option>
+                            </select>
+                        </div>
+                        <button id="predict-btn" class="predict-button glassmorphism">
+                            <span>Generate Prediction</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                    <div class="prediction-results">
+                        <canvas id="prediction-chart"></canvas>
+                        <div class="metrics-grid">
+                            <div class="metric glassmorphism">
+                                <span class="metric-label">Predicted Demand</span>
+                                <span class="metric-value" id="demand">-</span>
+                            </div>
+                            <div class="metric glassmorphism">
+                                <span class="metric-label">Confidence</span>
+                                <span class="metric-value" id="confidence">-</span>
+                            </div>
+                            <div class="metric glassmorphism">
+                                <span class="metric-label">Anomaly Score</span>
+                                <span class="metric-value" id="anomaly">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 3D Neural Network Visualization -->
+                <div class="neural-network-3d">
+                    <h4>3D Neural Network Visualization</h4>
+                    <div id="neural-network-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Visualizations Section -->
+        <section class="section data-viz glassmorphism">
+            <h2>Visualisations de Données Avancées</h2>
+            <div class="viz-grid">
+                <div class="viz-item glassmorphism">
+                    <h4>Skills Radar Chart</h4>
+                    <div id="skills-radar"></div>
+                </div>
+                <div class="viz-item glassmorphism">
+                    <h4>Project Timeline</h4>
+                    <div id="project-timeline"></div>
+                </div>
+                <div class="viz-item glassmorphism">
+                    <h4>Technology Network</h4>
+                    <div id="tech-network"></div>
+                </div>
+                <div class="viz-item glassmorphism">
+                    <h4>GitHub Contributions</h4>
+                    <div id="contribution-heatmap"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section publications glassmorphism">
             <h2>Publications et Projets</h2>
             <div class="timeline-container">
-                <div class="timeline-item">
+                <div class="timeline-item project-card">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <h3>Apprentissage de paysages de destinées cellulaires à partir de transcriptomique spatiale à l'aide de Fused Gromov-Wasserstein</h3>
                         <p class="meta"><em>bioRxiv</em>, 2024</p>
                         <p>Travail de recherche se concentrant sur le transport optimal pour la biologie computationnelle.</p>
-                        <a href="https://www.biorxiv.org/content/10.1101/2024.07.26.605241v1" class="btn-project">Lire l'article</a>
-                        <a href="https://github.com/cantinilab/stories" class="btn-project">Code</a>
+                        <div class="project-image" style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);"></div>
+                        <a href="https://www.biorxiv.org/content/10.1101/2024.07.26.605241v1" class="btn-project glassmorphism">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/stories" class="btn-project glassmorphism">Code</a>
                     </div>
                 </div>
-                <div class="timeline-item">
+                <div class="timeline-item project-card">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <h3>Intégration de données multi-omiques à l'aide de Mowgli</h3>
                         <p class="meta"><em>Nature Communications</em>, 2023</p>
                         <p>J'ai mis en place des modèles pour l'apprentissage à partir de différentes modalités multi-omiques unicellulaires.</p>
-                        <a href="https://www.nature.com/articles/s41467-023-43019-2" class="btn-project">Lire l'article</a>
-                        <a href="https://github.com/cantinilab/Mowgli" class="btn-project">Code</a>
+                        <div class="project-image" style="background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);"></div>
+                        <a href="https://www.nature.com/articles/s41467-023-43019-2" class="btn-project glassmorphism">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/Mowgli" class="btn-project glassmorphism">Code</a>
                     </div>
                 </div>
-                 <div class="timeline-item">
+                 <div class="timeline-item project-card">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <h3>Apprentissage non supervisé de métrique spatiale avec les vecteurs singuliers de Wasserstein</h3>
                         <p class="meta"><em>International Conference on Machine Learning (ICML)</em>, 2022</p>
                         <p>J'ai proposé une méthode d'apprentissage non supervisée de métrique spatiale.</p>
-                        <a href="https://proceedings.mlr.press/v162/huizing22a/huizing22a.pdf" class="btn-project">Lire l'article</a>
-                        <a href="https://github.com/CSDUlm/wsingular" class="btn-project">Code</a>
+                        <div class="project-image" style="background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <a href="https://proceedings.mlr.press/v162/huizing22a/huizing22a.pdf" class="btn-project glassmorphism">Lire l'article</a>
+                        <a href="https://github.com/CSDUlm/wsingular" class="btn-project glassmorphism">Code</a>
                     </div>
                 </div>
-                 <div class="timeline-item">
+                 <div class="timeline-item project-card">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <h3>Le transport optimal améliore l'inférence de la similarité cellule-cellule</h3>
                         <p class="meta"><em>Bioinformatics</em>, 2022</p>
                         <p>J'ai proposé une nouvelle méthode d'analyse des données d'omiques monocellulaires utilisant des distances de transport optimal.</p>
-                        <a href="https://academic.oup.com/bioinformatics/article/38/8/2169/6528312" class="btn-project">Lire l'article</a>
-                        <a href="https://github.com/cantinilab/OT-scOmics" class="btn-project">Code</a>
+                        <div class="project-image" style="background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);"></div>
+                        <a href="https://academic.oup.com/bioinformatics/article/38/8/2169/6528312" class="btn-project glassmorphism">Lire l'article</a>
+                        <a href="https://github.com/cantinilab/OT-scOmics" class="btn-project glassmorphism">Code</a>
                     </div>
                 </div>
             </div>
         </section>
         
-        <section class="section skills-section">
+        <section class="section skills-section glassmorphism">
             <h2>Compétences</h2>
             <div class="skills-grid">
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Machine Learning</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="90"></div></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Python</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="95"></div></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Mathématiques</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="85"></div></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Biologie Computationnelle</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="80"></div></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Développement Logiciel</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="75"></div></div>
                 </div>
-                <div class="skill-item">
+                <div class="skill-item glassmorphism">
                     <div class="skill-label">Rédaction Scientifique</div>
                     <div class="skill-bar-container"><div class="skill-bar" data-level="85"></div></div>
                 </div>
             </div>
         </section>
 
-        <section class="section education">
+        <section class="section education glassmorphism">
             <h2>Éducation</h2>
             <div class="education-container">
-                <div class="education-item">
+                <div class="education-item glassmorphism">
                     <h3>PhD en biologie computationnelle</h3>
                     <p>Institut Pasteur & ENS PSL | 2020-2024</p>
                 </div>
-                <div class="education-item">
+                <div class="education-item glassmorphism">
                     <h3>M2 Data Science</h3>
                     <p>Institut Polytechnique de Paris | 2019-2020</p>
                 </div>
-                <div class="education-item">
+                <div class="education-item glassmorphism">
                     <h3>Diplôme d'ingénieur</h3>
                     <p>Télécom Paris | 2017-2020</p>
                 </div>
-                 <div class="education-item">
+                 <div class="education-item glassmorphism">
                     <h3>MPSI-MP*</h3>
                     <p>Classe préparatoire Masséna, Nice | 2015-2017</p>
                 </div>
@@ -136,10 +277,21 @@
         
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2024 Tarek Djaker. Tous droits réservés.</p>
+    <footer class="footer glassmorphism">
+        <p>&copy; 2024 Tarek Djaker. Tous droits réservés. | Portfolio ultra-sophistiqué propulsé par l'IA</p>
     </footer>
 
-    <script src="js/script.js"></script>
+    <!-- Enhanced JavaScript -->
+    <script src="script.js"></script>
+    
+    <!-- Portfolio Enhancement Scripts -->
+    <script>
+        // Initialize ultra-sophisticated portfolio
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof UltraSophisticatedPortfolio !== 'undefined') {
+                const portfolio = new UltraSophisticatedPortfolio();
+            }
+        });
+    </script>
 </body>
 </html>
