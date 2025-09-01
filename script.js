@@ -3,7 +3,36 @@
  * ULTRA SOPHISTICATED PORTFOLIO JAVASCRIPT
  * Advanced Animations, 3D Graphics, ML Demonstrations
  * Author: Tarek Djaker
+ * Enhanced with performance optimizations and accessibility
  */
+
+// Performance monitoring
+const performanceMonitor = {
+    startTime: performance.now(),
+    metrics: {},
+    
+    mark(name) {
+        this.metrics[name] = performance.now() - this.startTime;
+    },
+    
+    measure(name, startMark, endMark) {
+        const start = this.metrics[startMark] || 0;
+        const end = this.metrics[endMark] || performance.now() - this.startTime;
+        this.metrics[name] = end - start;
+        return this.metrics[name];
+    },
+    
+    getMetrics() {
+        return {
+            ...this.metrics,
+            totalLoadTime: performance.now() - this.startTime,
+            userAgent: navigator.userAgent.slice(0, 100) + '...'
+        };
+    }
+};
+
+// Early performance mark
+performanceMonitor.mark('scriptStart');
 
 // Fallback functions for when external libraries are not available
 const createFallbacks = () => {
