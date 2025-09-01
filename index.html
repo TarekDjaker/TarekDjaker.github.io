@@ -2,60 +2,118 @@
 <html lang="fr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarek Djaker - Ultra Sophisticated Portfolio</title>
-    <meta name="description" content="Portfolio ultra sophistiqué de Tarek Djaker - Chercheur en apprentissage automatique et biologie computationnelle">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Tarek Djaker - Data Scientist & Machine Learning Engineer | Portfolio</title>
+    <meta name="description" content="Portfolio de Tarek Djaker - Expert en Data Science, Machine Learning et Transport Optimal. Publications Nature Communications, ICML. Spécialiste biologie computationnelle.">
+    <meta name="keywords" content="data science, machine learning, transport optimal, biologie computationnelle, deep learning, IA, recherche, publications scientifiques">
+    <meta name="author" content="Tarek Djaker">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tarekdjaker.github.io/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tarekdjaker.github.io/">
+    <meta property="og:title" content="Tarek Djaker - Data Scientist & Machine Learning Engineer">
+    <meta property="og:description" content="Portfolio de Tarek Djaker - Expert en Data Science, Machine Learning et Transport Optimal. Publications Nature Communications, ICML.">
+    <meta property="og:image" content="https://tarekdjaker.github.io/portrait_circle.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tarekdjaker.github.io/">
+    <meta property="twitter:title" content="Tarek Djaker - Data Scientist & Machine Learning Engineer">
+    <meta property="twitter:description" content="Portfolio de Tarek Djaker - Expert en Data Science, Machine Learning et Transport Optimal.">
+    <meta property="twitter:image" content="https://tarekdjaker.github.io/portrait_circle.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="portrait_circle.png">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Tarek Djaker",
+        "jobTitle": "Data Scientist & Machine Learning Engineer",
+        "description": "Expert en apprentissage automatique avec une expertise unique en transport optimal et biologie computationnelle",
+        "url": "https://tarekdjaker.github.io/",
+        "image": "https://tarekdjaker.github.io/portrait_circle.png",
+        "sameAs": [
+            "https://github.com/TarekDjaker",
+            "https://linkedin.com/in/tarek-djaker"
+        ],
+        "alumniOf": [
+            {
+                "@type": "Organization",
+                "name": "Institut Pasteur"
+            },
+            {
+                "@type": "Organization", 
+                "name": "Télécom Paris"
+            }
+        ],
+        "knowsAbout": ["Machine Learning", "Data Science", "Transport Optimal", "Biologie Computationnelle", "Deep Learning"]
+    }
+    </script>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
     <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Performance hint for external scripts -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//d3js.org">
     
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Critical scripts - load early -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <!-- Lenis Smooth Scroll -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <!-- Animation libraries - load deferred -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Smooth scroll - load deferred -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" defer></script>
     
-    <!-- TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <!-- Data visualization - load deferred -->
+    <script src="https://d3js.org/d3.v7.min.js" defer crossorigin="anonymous"></script>
+    
+    <!-- Machine Learning - load async for better performance -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js" async defer crossorigin="anonymous"></script>
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    
     <!-- Particle Background -->
-    <div id="particle-container"></div>
+    <div id="particle-container" aria-hidden="true"></div>
     
     <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
+    <div id="loading-screen" class="loading-screen" aria-live="polite" role="status">
         <div class="loading-content">
-            <div class="loading-spinner"></div>
+            <div class="loading-spinner" aria-hidden="true"></div>
             <h2>Initialisation du portfolio...</h2>
-            <div class="loading-progress">
+            <div class="loading-progress" role="progressbar" aria-label="Progression du chargement">
                 <div class="loading-bar"></div>
             </div>
         </div>
     </div>
 
     <!-- Morphing Background Shader -->
-    <canvas id="shader-background"></canvas>
+    <canvas id="shader-background" aria-hidden="true"></canvas>
 
-    <header class="header hero-section">
+    <header class="header hero-section" role="banner">
         <div class="header-content">
             <div class="profile-photo-container">
-                <img src="portrait_circle.png" alt="Photo de Tarek Djaker" class="profile-photo">
-                <div class="photo-glow"></div>
+                <img src="portrait_circle.png" alt="Photo de profil de Tarek Djaker, Data Scientist et Machine Learning Engineer" class="profile-photo" width="200" height="200">
+                <div class="photo-glow" aria-hidden="true"></div>
             </div>
             <div class="bio">
                 <h1 class="hero-title">Tarek Djaker</h1>
@@ -82,26 +140,26 @@
                     </div>
                 </div>
                 <div class="social-links">
-                    <a href="mailto:votre-email@example.com" class="social-btn glassmorphism" title="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://linkedin.com/in/votre-profil" class="social-btn glassmorphism" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/TarekDjaker" class="social-btn glassmorphism" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="https://twitter.com/votre-twitter" class="social-btn glassmorphism" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="mailto:tarek.djaker@example.com" class="social-btn glassmorphism" title="Envoyer un email" aria-label="Envoyer un email à Tarek Djaker"><i class="fas fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
+                    <a href="https://linkedin.com/in/tarek-djaker" class="social-btn glassmorphism" title="Profil LinkedIn" aria-label="Voir le profil LinkedIn de Tarek Djaker" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a>
+                    <a href="https://github.com/TarekDjaker" class="social-btn glassmorphism" title="Profil GitHub" aria-label="Voir le profil GitHub de Tarek Djaker" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a>
+                    <a href="https://twitter.com/tarek-djaker" class="social-btn glassmorphism" title="Profil Twitter" aria-label="Voir le profil Twitter de Tarek Djaker" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter" aria-hidden="true"></i><span class="sr-only">Twitter</span></a>
                 </div>
             </div>
         </div>
         
         <!-- 3D Canvas Container -->
-        <div id="canvas-container" class="canvas-3d"></div>
+        <div id="canvas-container" class="canvas-3d" aria-hidden="true"></div>
         
         <!-- Floating particles -->
-        <div class="floating-elements">
+        <div class="floating-elements" aria-hidden="true">
             <div class="floating-element" data-speed="0.5"></div>
             <div class="floating-element" data-speed="0.8"></div>
             <div class="floating-element" data-speed="0.3"></div>
         </div>
     </header>
 
-    <main class="main-content">
+    <main id="main-content" class="main-content" role="main">
 
         <section class="section about-me glassmorphism">
             <h2>À propos de moi</h2>
@@ -207,69 +265,217 @@
         </section>
 
         <!-- Portfolio Projects Navigation -->
-        <section class="section portfolio-nav glassmorphism">
-            <h2>🚀 Portfolio de Projets Organisés</h2>
+        <section class="section portfolio-nav glassmorphism" role="region" aria-labelledby="portfolio-heading">
+            <h2 id="portfolio-heading">🚀 Portfolio de Projets Organisés</h2>
             <p class="section-description">Explorez mes projets organisés par domaine d'expertise pour une navigation optimisée</p>
             <div class="portfolio-grid">
-                <div class="portfolio-card glassmorphism">
-                    <div class="portfolio-icon">🤖</div>
+                <article class="portfolio-card glassmorphism">
+                    <div class="portfolio-icon" aria-hidden="true">🤖</div>
                     <h3>Machine Learning</h3>
-                    <p>Algorithmes ML, transport optimal, et optimisation avancée</p>
+                    <p>Algorithmes ML, transport optimal, et optimisation avancée avec des applications en biologie computationnelle</p>
                     <div class="portfolio-stats">
-                        <span>🏆 4 publications</span>
-                        <span>📊 3 repos actifs</span>
+                        <span>🏆 4 publications internationales</span>
+                        <span>📊 3 repos open-source actifs</span>
+                        <span>🔬 Transport Optimal spécialisé</span>
                     </div>
-                    <a href="./projects/machine-learning/" class="btn-portfolio glassmorphism">Explorer</a>
-                </div>
-                <div class="portfolio-card glassmorphism">
-                    <div class="portfolio-icon">📊</div>
+                    <div class="portfolio-features">
+                        <small>• Méthodes Wasserstein • Single-cell analysis • Fused Gromov-Wasserstein</small>
+                    </div>
+                    <a href="./projects/machine-learning/" class="btn-portfolio glassmorphism">Explorer les projets ML</a>
+                </article>
+                <article class="portfolio-card glassmorphism">
+                    <div class="portfolio-icon" aria-hidden="true">📊</div>
                     <h3>Statistiques</h3>
-                    <p>Analyses statistiques, tests d'hypothèses, et modélisation bayésienne</p>
+                    <p>Analyses statistiques rigoureuses, tests d'hypothèses, et modélisation bayésienne avec focus A/B testing</p>
                     <div class="portfolio-stats">
-                        <span>📈 A/B Testing</span>
-                        <span>🔬 Inférence</span>
+                        <span>📈 Dashboard A/B Testing (priorité)</span>
+                        <span>🔬 Inférence bayésienne</span>
+                        <span>📊 Reproductibilité scientifique</span>
                     </div>
-                    <a href="./projects/statistics/" class="btn-portfolio glassmorphism">Explorer</a>
-                </div>
-                <div class="portfolio-card glassmorphism">
-                    <div class="portfolio-icon">🧠</div>
+                    <div class="portfolio-features">
+                        <small>• Streamlit • scipy.stats • Modélisation hiérarchique • Méta-analyses</small>
+                    </div>
+                    <a href="./projects/statistics/" class="btn-portfolio glassmorphism">Explorer les analyses</a>
+                </article>
+                <article class="portfolio-card glassmorphism">
+                    <div class="portfolio-icon" aria-hidden="true">🧠</div>
                     <h3>Deep Learning</h3>
-                    <p>Réseaux de neurones, architectures innovantes, et applications médicales</p>
+                    <p>Réseaux de neurones avancés, architectures innovantes et applications médicales avec explainability</p>
                     <div class="portfolio-stats">
-                        <span>🏥 Imagerie médicale</span>
-                        <span>🎨 GANs créatives</span>
+                        <span>🏥 Classification images médicales</span>
+                        <span>🎨 GANs créatives et pratiques</span>
+                        <span>🔍 Techniques d'explainability</span>
                     </div>
-                    <a href="./projects/deep-learning/" class="btn-portfolio glassmorphism">Explorer</a>
+                    <div class="portfolio-features">
+                        <small>• PyTorch • MONAI • GradCAM • LIME • Ethical AI</small>
+                    </div>
+                    <a href="./projects/deep-learning/" class="btn-portfolio glassmorphism">Explorer les réseaux</a>
+                </article>
                 </div>
-                <div class="portfolio-card glassmorphism">
-                    <div class="portfolio-icon">📈</div>
+                <article class="portfolio-card glassmorphism">
+                    <div class="portfolio-icon" aria-hidden="true">📈</div>
                     <h3>Data Visualization</h3>
-                    <p>Dashboards interactifs, storytelling, et visualisations 3D</p>
+                    <p>Dashboards interactifs, storytelling de données et visualisations 3D immersives</p>
                     <div class="portfolio-stats">
-                        <span>🏆 2 awards dataviz</span>
-                        <span>🎨 D3.js expert</span>
+                        <span>🏆 2 awards dataviz internationaux</span>
+                        <span>🎨 Expert D3.js et WebGL</span>
+                        <span>📊 Dashboard médical prioritaire</span>
                     </div>
-                    <a href="./projects/data-visualization/" class="btn-portfolio glassmorphism">Explorer</a>
-                </div>
-                <div class="portfolio-card glassmorphism">
-                    <div class="portfolio-icon">💻</div>
+                    <div class="portfolio-features">
+                        <small>• Observable • Three.js • React • Temps réel • UX/UI design</small>
+                    </div>
+                    <a href="./projects/data-visualization/" class="btn-portfolio glassmorphism">Explorer les visualisations</a>
+                </article>
+                <article class="portfolio-card glassmorphism">
+                    <div class="portfolio-icon" aria-hidden="true">💻</div>
                     <h3>Coding Interviews</h3>
-                    <p>Algorithmes, structures de données, et préparation technique</p>
+                    <p>Algorithmes optimisés, structures de données avancées et préparation technique complète</p>
                     <div class="portfolio-stats">
-                        <span>⚡ 650+ LeetCode</span>
-                        <span>🥇 Contests top 15%</span>
+                        <span>⚡ 650+ problèmes LeetCode résolus</span>
+                        <span>🥇 Contests top 15% mondial</span>
+                        <span>🏆 Plateforme competitive programming</span>
                     </div>
-                    <a href="./projects/coding-interviews/" class="btn-portfolio glassmorphism">Explorer</a>
+                    <div class="portfolio-features">
+                        <small>• Python/Java/C++ • FastAPI • PostgreSQL • Évaluation automatique</small>
+                    </div>
+                    <a href="./projects/coding-interviews/" class="btn-portfolio glassmorphism">Explorer les algorithmes</a>
+                </article>
+                <article class="portfolio-card glassmorphism featured">
+                    <div class="portfolio-icon" aria-hidden="true">📚</div>
+                    <h3>Vue d'Ensemble & Roadmap</h3>
+                    <p>Accédez à la structure complète du portfolio, roadmap de développement et suggestions de projets</p>
+                    <div class="portfolio-stats">
+                        <span>🎯 Roadmap 24 semaines détaillée</span>
+                        <span>💡 15+ suggestions projets priorisées</span>
+                        <span>📊 Métriques de succès définies</span>
+                    </div>
+                    <div class="portfolio-features">
+                        <small>• Templates qualité • Critères priorisation • Estimation budgétaire</small>
+                    </div>
+                    <a href="./projects/" class="btn-portfolio glassmorphism featured-btn">Accéder à la vue complète</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Priority Projects Roadmap -->
+        <section class="section roadmap-projects glassmorphism" role="region" aria-labelledby="roadmap-heading">
+            <h2 id="roadmap-heading">🎯 Roadmap de Développement Prioritaire</h2>
+            <p class="section-description">Projets à fort impact basés sur l'analyse des besoins du marché et mes expertises uniques</p>
+            
+            <div class="roadmap-timeline">
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <span class="phase-badge">Phase 1</span>
+                        <h3>Priorité Immédiate</h3>
+                        <span class="phase-duration">6 semaines</span>
+                    </div>
+                    <div class="phase-projects">
+                        <article class="roadmap-project priority-high">
+                            <div class="project-header">
+                                <h4>📊 Dashboard A/B Testing Professionnel</h4>
+                                <span class="project-impact">Impact Très Haut</span>
+                            </div>
+                            <p>Interface complète pour non-techniciens avec calculs de puissance statistique automatisés</p>
+                            <div class="project-details">
+                                <span class="tech-stack">Streamlit • scipy.stats • plotly • SQLite</span>
+                                <span class="project-duration">3 semaines</span>
+                            </div>
+                        </article>
+                        <article class="roadmap-project priority-medium">
+                            <div class="project-header">
+                                <h4>📈 Time Series Forecasting Dashboard</h4>
+                                <span class="project-impact">Impact Haut</span>
+                            </div>
+                            <p>Prédictions énergétiques avec modèles LSTM et interfaces temps réel</p>
+                            <div class="project-details">
+                                <span class="tech-stack">TensorFlow • FastAPI • React • WebSockets</span>
+                                <span class="project-duration">2 semaines</span>
+                            </div>
+                        </article>
+                    </div>
                 </div>
-                <div class="portfolio-card glassmorphism featured">
-                    <div class="portfolio-icon">📚</div>
-                    <h3>Vue d'Ensemble</h3>
-                    <p>Accédez à la structure complète du portfolio et aux recommandations</p>
-                    <div class="portfolio-stats">
-                        <span>🎯 Roadmap détaillée</span>
-                        <span>💡 Suggestions projets</span>
+                
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <span class="phase-badge">Phase 2</span>
+                        <h3>Moyen Terme</h3>
+                        <span class="phase-duration">8 semaines</span>
                     </div>
-                    <a href="./projects/" class="btn-portfolio glassmorphism">Vue Complète</a>
+                    <div class="phase-projects">
+                        <article class="roadmap-project priority-high">
+                            <div class="project-header">
+                                <h4>🤖 Système de Recommandation E-commerce</h4>
+                                <span class="project-impact">Impact Très Haut</span>
+                            </div>
+                            <p>Algorithmes hybrides collaborative/content-based avec MLOps intégré</p>
+                            <div class="project-details">
+                                <span class="tech-stack">PyTorch • MLflow • Docker • Kubernetes</span>
+                                <span class="project-duration">4 semaines</span>
+                            </div>
+                        </article>
+                        <article class="roadmap-project priority-medium">
+                            <div class="project-header">
+                                <h4>🎨 ML Algorithm Visualizer</h4>
+                                <span class="project-impact">Impact Pédagogique</span>
+                            </div>
+                            <p>Plateforme éducative 3D pour comprendre les algorithmes ML</p>
+                            <div class="project-details">
+                                <span class="tech-stack">Three.js • D3.js • Observable • WebGL</span>
+                                <span class="project-duration">3 semaines</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                
+                <div class="roadmap-phase">
+                    <div class="phase-header">
+                        <span class="phase-badge">Phase 3</span>
+                        <h3>Long Terme</h3>
+                        <span class="phase-duration">10 semaines</span>
+                    </div>
+                    <div class="phase-projects">
+                        <article class="roadmap-project priority-high">
+                            <div class="project-header">
+                                <h4>🏥 Classification Images Médicales + Explainability</h4>
+                                <span class="project-impact">Impact Innovation</span>
+                            </div>
+                            <p>Interface diagnostic assisté avec techniques d'explainability et Ethical AI</p>
+                            <div class="project-details">
+                                <span class="tech-stack">PyTorch • MONAI • GradCAM • LIME • Streamlit</span>
+                                <span class="project-duration">5 semaines</span>
+                            </div>
+                        </article>
+                        <article class="roadmap-project priority-medium">
+                            <div class="project-header">
+                                <h4>🚀 AutoML Platform Déployable</h4>
+                                <span class="project-impact">Impact Entreprise</span>
+                            </div>
+                            <p>Pipeline automatisé complet de la donnée au modèle déployé</p>
+                            <div class="project-details">
+                                <span class="tech-stack">AutoML • H2O.ai • Kubeflow • Terraform</span>
+                                <span class="project-duration">4 semaines</span>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="roadmap-metrics">
+                <div class="metric-item">
+                    <span class="metric-number">24</span>
+                    <span class="metric-label">Semaines totales</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-number">6</span>
+                    <span class="metric-label">Projets prioritaires</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-number">40%</span>
+                    <span class="metric-label">Impact recruteur</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-number">15+</span>
+                    <span class="metric-label">Technologies modernes</span>
                 </div>
             </div>
         </section>
