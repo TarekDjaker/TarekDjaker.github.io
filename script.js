@@ -578,21 +578,197 @@ class UltraSophisticatedPortfolio {
         const container = document.getElementById('skills-radar');
         if (!container) return;
 
-        container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 300px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
-                <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 4s linear infinite;">📊</div>
-                <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Skills Radar Chart</p>
-                <p style="font-size: 0.8rem; opacity: 0.7;">Interactive D3.js visualization</p>
-                <div style="margin-top: 1rem;">
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; font-size: 0.8rem;">
-                        <div>🐍 Python: 95%</div>
-                        <div>🤖 ML: 90%</div>
-                        <div>🧠 DL: 85%</div>
-                        <div>📊 DataViz: 88%</div>
-                    </div>
-                </div>
-            </div>
-        `;
+        // Create canvas element for custom radar chart
+        container.innerHTML = '<canvas id="skills-radar-chart" style="max-height: 300px; width: 100%;"></canvas>';
+        
+        const canvas = document.getElementById('skills-radar-chart');
+        if (!canvas) return;
+
+        // Set canvas size
+        const size = Math.min(300, container.clientWidth || 300);
+        canvas.width = size;
+        canvas.height = size;
+        canvas.style.maxWidth = '100%';
+        canvas.style.height = 'auto';
+
+        const ctx = canvas.getContext('2d');
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = size * 0.35;
+
+        // Skills data - professional competencies for Data Scientist/ML Engineer/Researcher
+        const skills = [
+            { label: 'Python/Programming', value: 95, color: '#667eea' },
+            { label: 'Machine Learning', value: 90, color: '#764ba2' },
+            { label: 'Deep Learning', value: 85, color: '#f093fb' },
+            { label: 'Data Visualization', value: 88, color: '#4facfe' },
+            { label: 'Mathematics/Stats', value: 85, color: '#43e97b' },
+            { label: 'Computational Biology', value: 80, color: '#667eea' },
+            { label: 'Software Engineering', value: 75, color: '#764ba2' },
+            { label: 'Scientific Writing', value: 85, color: '#f093fb' }
+        ];
+
+        // Animation state
+        let animationProgress = 0;
+        const animationDuration = 2000;
+        let startTime = null;
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            animationProgress = Math.min(elapsed / animationDuration, 1);
+            
+            // Easing function for smooth animation
+            const easeProgress = 1 - Math.pow(1 - animationProgress, 3);
+            
+            drawRadarChart(easeProgress);
+            
+            if (animationProgress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function drawRadarChart(progress) {
+            ctx.clearRect(0, 0, size, size);
+            
+            // Set up styling for dark theme
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+
+            // Draw concentric circles (grid)
+            for (let i = 1; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, (radius * i) / 5, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+
+            // Draw axis lines and labels
+            const angleStep = (2 * Math.PI) / skills.length;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            skills.forEach((skill, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const x1 = centerX;
+                const y1 = centerY;
+                const x2 = centerX + Math.cos(angle) * radius;
+                const y2 = centerY + Math.sin(angle) * radius;
+
+                // Draw axis line
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+
+                // Draw label
+                const labelX = centerX + Math.cos(angle) * (radius + 25);
+                const labelY = centerY + Math.sin(angle) * (radius + 25);
+                
+                // Split long labels into multiple lines
+                const words = skill.label.split('/');
+                if (words.length > 1) {
+                    ctx.fillText(words[0], labelX, labelY - 6);
+                    ctx.fillText(words[1], labelX, labelY + 6);
+                } else {
+                    ctx.fillText(skill.label, labelX, labelY);
+                }
+            });
+
+            // Draw data polygon with animation
+            ctx.strokeStyle = 'rgba(102, 126, 234, 0.8)';
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.1)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            skills.forEach((skill, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const value = (skill.value / 100) * progress;
+                const x = centerX + Math.cos(angle) * (radius * value);
+                const y = centerY + Math.sin(angle) * (radius * value);
+
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw data points with glow effect
+            skills.forEach((skill, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const value = (skill.value / 100) * progress;
+                const x = centerX + Math.cos(angle) * (radius * value);
+                const y = centerY + Math.sin(angle) * (radius * value);
+
+                // Glow effect
+                ctx.shadowColor = skill.color;
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = skill.color;
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Inner white dot
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // Draw percentage values near data points
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = '10px Inter, sans-serif';
+            skills.forEach((skill, index) => {
+                const angle = index * angleStep - Math.PI / 2;
+                const value = skill.value * progress;
+                const displayRadius = radius * (skill.value / 100) * progress;
+                const x = centerX + Math.cos(angle) * (displayRadius + 15);
+                const y = centerY + Math.sin(angle) * (displayRadius + 15);
+
+                if (progress > 0.7) { // Only show when animation is nearly complete
+                    ctx.fillText(`${Math.round(value)}%`, x, y);
+                }
+            });
+        }
+
+        // Add interactivity
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Convert to canvas coordinates
+            const canvasX = (x / rect.width) * canvas.width;
+            const canvasY = (y / rect.height) * canvas.height;
+            
+            // Check if mouse is over a data point
+            let hovering = false;
+            skills.forEach((skill, index) => {
+                const angle = index * (2 * Math.PI) / skills.length - Math.PI / 2;
+                const pointX = centerX + Math.cos(angle) * (radius * skill.value / 100);
+                const pointY = centerY + Math.sin(angle) * (radius * skill.value / 100);
+                
+                const distance = Math.sqrt((canvasX - pointX) ** 2 + (canvasY - pointY) ** 2);
+                if (distance < 10) {
+                    hovering = true;
+                    canvas.title = `${skill.label}: ${skill.value}%`;
+                }
+            });
+            
+            canvas.style.cursor = hovering ? 'pointer' : 'default';
+        });
+
+        // Start animation
+        requestAnimationFrame(animate);
     }
 
     createProjectTimeline() {
