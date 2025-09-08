@@ -135,6 +135,28 @@ const applySimpleAnimation = (element, options) => {
     requestAnimationFrame(animate);
 };
 
+// Theme toggle setup with ARIA state management
+const setupThemeToggle = () => {
+    const toggleButton = document.getElementById('theme-toggle');
+    if (!toggleButton) return;
+
+    const htmlEl = document.documentElement;
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
+
+    htmlEl.setAttribute('data-theme', initialTheme);
+    toggleButton.setAttribute('aria-pressed', initialTheme === 'dark');
+
+    toggleButton.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        htmlEl.setAttribute('data-theme', newTheme);
+        toggleButton.setAttribute('aria-pressed', newTheme === 'dark');
+        localStorage.setItem('theme', newTheme);
+    });
+};
+
 // Ultra Sophisticated Portfolio Class
 class UltraSophisticatedPortfolio {
     constructor() {
@@ -895,7 +917,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(style);
-    
+
+    // Initialize theme toggle button
+    setupThemeToggle();
+
     // Initialize ultra-sophisticated portfolio
     const portfolio = new UltraSophisticatedPortfolio();
     
