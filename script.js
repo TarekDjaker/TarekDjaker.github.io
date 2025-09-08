@@ -200,6 +200,9 @@ class UltraSophisticatedPortfolio {
         // Initialize interactive elements
         this.initInteractiveElements();
         
+        // Initialize theme toggle
+        this.initThemeToggle();
+        
         // Hide loading screen
         setTimeout(() => this.hideLoadingScreen(), 1000);
         
@@ -1709,6 +1712,102 @@ class UltraSophisticatedPortfolio {
                 });
             }
         });
+    }
+    
+    // ==========================================
+    // THEME TOGGLE FUNCTIONALITY
+    // ==========================================
+    
+    initThemeToggle() {
+        console.log('🎨 Initializing theme toggle...');
+        
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+        
+        // Get current theme from localStorage or default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        this.setTheme(currentTheme);
+        
+        // Add click listener
+        themeToggle.addEventListener('click', () => this.toggleTheme());
+        
+        // Add keyboard support
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.toggleTheme();
+            }
+        });
+        
+        // Update button icon based on current theme
+        this.updateThemeToggleIcon(currentTheme);
+    }
+    
+    toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // Smooth transition
+        html.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        // Set new theme
+        this.setTheme(newTheme);
+        
+        // Save to localStorage
+        localStorage.setItem('theme', newTheme);
+        
+        // Update button
+        this.updateThemeToggleIcon(newTheme);
+        
+        // Remove transition after animation
+        setTimeout(() => {
+            html.style.transition = '';
+        }, 300);
+        
+        console.log(`🎨 Theme switched to: ${newTheme}`);
+    }
+    
+    setTheme(theme) {
+        const html = document.documentElement;
+        html.setAttribute('data-theme', theme);
+        
+        // Update aria-pressed for accessibility
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        }
+    }
+    
+    updateThemeToggleIcon(theme) {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+        
+        // Clear existing content
+        themeToggle.innerHTML = '';
+        
+        // Create icon element
+        const icon = document.createElement('span');
+        icon.className = 'theme-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        
+        if (theme === 'dark') {
+            // Show sun icon for switching to light
+            icon.innerHTML = '☀️';
+            icon.style.filter = 'drop-shadow(0 0 8px rgba(255, 193, 7, 0.6))';
+        } else {
+            // Show moon icon for switching to dark
+            icon.innerHTML = '🌙';
+            icon.style.filter = 'drop-shadow(0 0 8px rgba(108, 117, 125, 0.6))';
+        }
+        
+        themeToggle.appendChild(icon);
+        
+        // Add screen reader text
+        const srText = document.createElement('span');
+        srText.className = 'sr-only';
+        srText.textContent = theme === 'dark' ? 'Passer au thème clair' : 'Passer au thème sombre';
+        themeToggle.appendChild(srText);
     }
 }
 
