@@ -194,6 +194,9 @@ class UltraSophisticatedPortfolio {
         // Initialize data visualizations
         this.initDataVisualizations();
         
+        // Initialize A/B testing dashboard
+        this.initABTestingDashboard();
+        
         // Initialize interactive elements
         this.initInteractiveElements();
         
@@ -888,6 +891,338 @@ class UltraSophisticatedPortfolio {
                 photo.style.filter = `drop-shadow(0 20px 40px rgba(102, 126, 234, ${glowIntensity * 0.5}))`;
             }, 50);
         }
+    }
+    
+    // ==========================================
+    // A/B TESTING DASHBOARD FUNCTIONALITY
+    // ==========================================
+    
+    initABTestingDashboard() {
+        console.log('📊 Initializing A/B Testing Dashboard...');
+        
+        const calculateBtn = document.getElementById('calculate-sample-size');
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', () => this.calculateSampleSize());
+        }
+        
+        // Initialize charts
+        this.initABCharts();
+        
+        // Add live update listeners
+        this.addABEventListeners();
+    }
+    
+    calculateSampleSize() {
+        const baselineConversion = parseFloat(document.getElementById('baseline-conversion').value) / 100;
+        const minimumEffect = parseFloat(document.getElementById('minimum-effect').value) / 100;
+        const statisticalPower = parseFloat(document.getElementById('statistical-power').value);
+        const significanceLevel = parseFloat(document.getElementById('significance-level').value);
+        
+        // Calculate improved conversion rate
+        const improvedConversion = baselineConversion * (1 + minimumEffect);
+        
+        // Z-scores for power and significance
+        const zAlpha = this.getZScore(1 - significanceLevel / 2);
+        const zBeta = this.getZScore(statisticalPower);
+        
+        // Sample size calculation using two-proportion z-test formula
+        const pooledP = (baselineConversion + improvedConversion) / 2;
+        const numerator = Math.pow(zAlpha * Math.sqrt(2 * pooledP * (1 - pooledP)) + 
+                                  zBeta * Math.sqrt(baselineConversion * (1 - baselineConversion) + 
+                                                   improvedConversion * (1 - improvedConversion)), 2);
+        const denominator = Math.pow(improvedConversion - baselineConversion, 2);
+        
+        const sampleSizePerGroup = Math.ceil(numerator / denominator);
+        
+        // Estimate duration (assuming 1000 visitors per day per group)
+        const visitorsPerDay = 1000;
+        const estimatedDuration = Math.ceil(sampleSizePerGroup / visitorsPerDay);
+        
+        // Update UI with results
+        this.updateABResults({
+            sampleSize: sampleSizePerGroup,
+            duration: estimatedDuration,
+            confidence: (1 - significanceLevel) * 100,
+            improvement: minimumEffect * 100
+        });
+        
+        // Update charts
+        this.updateABCharts({
+            baselineConversion,
+            improvedConversion,
+            sampleSize: sampleSizePerGroup,
+            significanceLevel,
+            statisticalPower
+        });
+    }
+    
+    getZScore(probability) {
+        // Approximate inverse normal distribution for common values
+        const zScores = {
+            0.90: 1.282, 0.95: 1.645, 0.975: 1.96, 0.99: 2.326, 0.995: 2.576
+        };
+        
+        // Find closest match or interpolate
+        const keys = Object.keys(zScores).map(Number).sort((a, b) => a - b);
+        for (let i = 0; i < keys.length; i++) {
+            if (probability <= keys[i]) {
+                return zScores[keys[i]];
+            }
+        }
+        return 2.576; // Default for very high confidence
+    }
+    
+    updateABResults(results) {
+        document.getElementById('sample-size-result').textContent = results.sampleSize.toLocaleString();
+        document.getElementById('duration-result').textContent = results.duration.toLocaleString();
+        document.getElementById('confidence-result').textContent = results.confidence.toFixed(1) + '%';
+        document.getElementById('improvement-result').textContent = results.improvement.toFixed(1) + '%';
+        
+        // Animate the numbers
+        this.animateABNumbers();
+    }
+    
+    animateABNumbers() {
+        const metrics = document.querySelectorAll('.ab-metric-card');
+        metrics.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 200);
+            }, index * 100);
+        });
+    }
+    
+    initABCharts() {
+        this.drawDistributionChart();
+        this.drawBayesianChart();
+    }
+    
+    updateABCharts(params) {
+        this.drawDistributionChart(params);
+        this.updateBayesianAnalysis(params);
+    }
+    
+    drawDistributionChart(params = null) {
+        const canvas = document.getElementById('ab-distribution-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 300;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Default parameters for visualization
+        const defaultParams = {
+            baselineConversion: 0.05,
+            improvedConversion: 0.06,
+            sampleSize: 1000,
+            significanceLevel: 0.05
+        };
+        
+        const p = params || defaultParams;
+        
+        // Draw axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
+        
+        // X-axis
+        ctx.beginPath();
+        ctx.moveTo(50, canvas.height - 50);
+        ctx.lineTo(canvas.width - 20, canvas.height - 50);
+        ctx.stroke();
+        
+        // Y-axis
+        ctx.beginPath();
+        ctx.moveTo(50, 20);
+        ctx.lineTo(50, canvas.height - 50);
+        ctx.stroke();
+        
+        // Draw normal distributions for H0 and H1
+        this.drawNormalDistribution(ctx, canvas, p, 'H0', '#667eea');
+        this.drawNormalDistribution(ctx, canvas, p, 'H1', '#f093fb');
+        
+        // Add labels
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Différence de taux de conversion', canvas.width / 2 - 80, canvas.height - 20);
+        
+        // Rotate and draw Y-axis label
+        ctx.save();
+        ctx.translate(20, canvas.height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Densité de probabilité', -40, 0);
+        ctx.restore();
+    }
+    
+    drawNormalDistribution(ctx, canvas, params, hypothesis, color) {
+        const { baselineConversion, improvedConversion, sampleSize } = params;
+        
+        // Calculate distribution parameters
+        const p1 = baselineConversion;
+        const p2 = hypothesis === 'H0' ? baselineConversion : improvedConversion;
+        const mean = p2 - p1;
+        const standardError = Math.sqrt((p1 * (1 - p1) + p2 * (1 - p2)) / sampleSize);
+        
+        // Draw the curve
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        const xMin = -0.05;
+        const xMax = 0.05;
+        const steps = 200;
+        
+        for (let i = 0; i <= steps; i++) {
+            const x = xMin + (xMax - xMin) * i / steps;
+            const y = this.normalPDF(x, mean, standardError);
+            
+            const canvasX = 50 + (x - xMin) / (xMax - xMin) * (canvas.width - 70);
+            const canvasY = canvas.height - 50 - y * 2000; // Scale for visibility
+            
+            if (i === 0) {
+                ctx.moveTo(canvasX, canvasY);
+            } else {
+                ctx.lineTo(canvasX, canvasY);
+            }
+        }
+        
+        ctx.stroke();
+    }
+    
+    normalPDF(x, mean, std) {
+        return (1 / (std * Math.sqrt(2 * Math.PI))) * 
+               Math.exp(-0.5 * Math.pow((x - mean) / std, 2));
+    }
+    
+    drawBayesianChart() {
+        const canvas = document.getElementById('bayesian-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 300;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw placeholder Bayesian visualization
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '16px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Analyse Bayésienne', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Distributions Beta posteriori', canvas.width / 2, canvas.height / 2 + 10);
+    }
+    
+    updateBayesianAnalysis(params) {
+        // Simplified Bayesian analysis
+        const priorAlpha = parseFloat(document.getElementById('prior-alpha').value) || 1;
+        const priorBeta = parseFloat(document.getElementById('prior-beta').value) || 1;
+        
+        // Simulate some data for demonstration
+        const sampleSizeA = 1000;
+        const conversionsA = Math.round(sampleSizeA * params.baselineConversion);
+        const sampleSizeB = 1000;
+        const conversionsB = Math.round(sampleSizeB * params.improvedConversion);
+        
+        // Beta posterior parameters
+        const alphaA = priorAlpha + conversionsA;
+        const betaA = priorBeta + sampleSizeA - conversionsA;
+        const alphaB = priorAlpha + conversionsB;
+        const betaB = priorBeta + sampleSizeB - conversionsB;
+        
+        // Monte Carlo simulation for P(B > A)
+        const simulations = 10000;
+        let bBetterCount = 0;
+        
+        for (let i = 0; i < simulations; i++) {
+            const sampleA = this.betaRandom(alphaA, betaA);
+            const sampleB = this.betaRandom(alphaB, betaB);
+            if (sampleB > sampleA) bBetterCount++;
+        }
+        
+        const probBBetter = bBetterCount / simulations;
+        const expectedImprovement = (alphaB / (alphaB + betaB) - alphaA / (alphaA + betaA)) * 100;
+        
+        // Update UI
+        document.getElementById('prob-b-better').textContent = (probBBetter * 100).toFixed(1) + '%';
+        document.getElementById('expected-improvement').textContent = expectedImprovement.toFixed(2) + '%';
+    }
+    
+    betaRandom(alpha, beta) {
+        // Simple Beta distribution sampling using Gamma distributions
+        const gamma1 = this.gammaRandom(alpha);
+        const gamma2 = this.gammaRandom(beta);
+        return gamma1 / (gamma1 + gamma2);
+    }
+    
+    gammaRandom(shape) {
+        // Simplified Gamma distribution sampling
+        if (shape < 1) {
+            return this.gammaRandom(shape + 1) * Math.pow(Math.random(), 1/shape);
+        }
+        
+        const d = shape - 1/3;
+        const c = 1 / Math.sqrt(9 * d);
+        
+        for (let i = 0; i < 100; i++) {
+            let x, v;
+            do {
+                x = this.normalRandom();
+                v = 1 + c * x;
+            } while (v <= 0);
+            
+            v = v * v * v;
+            const u = Math.random();
+            
+            if (u < 1 - 0.0331 * x * x * x * x || 
+                Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) {
+                return d * v;
+            }
+        }
+        return 1; // Fallback
+    }
+    
+    normalRandom() {
+        // Box-Muller transform
+        if (this.spare !== undefined) {
+            const temp = this.spare;
+            delete this.spare;
+            return temp;
+        }
+        
+        const u = Math.random();
+        const v = Math.random();
+        const mag = Math.sqrt(-2 * Math.log(u));
+        this.spare = mag * Math.cos(2 * Math.PI * v);
+        return mag * Math.sin(2 * Math.PI * v);
+    }
+    
+    addABEventListeners() {
+        // Add live update listeners for form inputs
+        const inputs = [
+            'baseline-conversion', 'minimum-effect', 
+            'statistical-power', 'significance-level',
+            'prior-alpha', 'prior-beta'
+        ];
+        
+        inputs.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', () => {
+                    // Debounce the calculations
+                    clearTimeout(this.abCalculationTimeout);
+                    this.abCalculationTimeout = setTimeout(() => {
+                        this.calculateSampleSize();
+                    }, 500);
+                });
+            }
+        });
     }
 }
 

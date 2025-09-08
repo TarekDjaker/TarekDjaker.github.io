@@ -249,6 +249,127 @@
             </div>
         </section>
 
+        <!-- A/B Testing Dashboard Section -->
+        <section class="section ab-testing glassmorphism" role="region" aria-labelledby="ab-testing-heading">
+            <h2 id="ab-testing-heading">📊 Dashboard A/B Testing Professionnel</h2>
+            <p class="section-description">Interface complète pour l'analyse statistique d'expériences A/B avec calculs de puissance automatisés</p>
+            
+            <div class="ab-testing-container">
+                <div class="ab-test-setup">
+                    <h3>Configuration de l'Expérience</h3>
+                    <div class="ab-form-grid">
+                        <div class="form-group">
+                            <label for="baseline-conversion">Taux de conversion baseline (%)</label>
+                            <input type="number" id="baseline-conversion" min="0.1" max="50" step="0.1" value="5.0">
+                            <span class="input-help">Taux de conversion actuel de votre contrôle</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="minimum-effect">Effet minimum détectable (%)</label>
+                            <input type="number" id="minimum-effect" min="0.1" max="100" step="0.1" value="20.0">
+                            <span class="input-help">Amélioration minimum à détecter (relative)</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="statistical-power">Puissance statistique</label>
+                            <select id="statistical-power">
+                                <option value="0.8">80% (Standard)</option>
+                                <option value="0.9">90% (Élevé)</option>
+                                <option value="0.95">95% (Très élevé)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="significance-level">Seuil de significativité</label>
+                            <select id="significance-level">
+                                <option value="0.05">5% (α = 0.05)</option>
+                                <option value="0.01">1% (α = 0.01)</option>
+                                <option value="0.1">10% (α = 0.10)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calculate-sample-size" class="ab-calculate-btn glassmorphism">
+                        📊 Calculer la Taille d'Échantillon
+                    </button>
+                </div>
+                
+                <div class="ab-results-grid">
+                    <div class="ab-metric-card glassmorphism">
+                        <div class="metric-header">
+                            <span class="metric-icon">👥</span>
+                            <span class="metric-title">Taille d'Échantillon</span>
+                        </div>
+                        <div class="metric-value" id="sample-size-result">-</div>
+                        <div class="metric-subtitle">visiteurs par groupe</div>
+                    </div>
+                    
+                    <div class="ab-metric-card glassmorphism">
+                        <div class="metric-header">
+                            <span class="metric-icon">⏱️</span>
+                            <span class="metric-title">Durée Estimée</span>
+                        </div>
+                        <div class="metric-value" id="duration-result">-</div>
+                        <div class="metric-subtitle">jours d'expérience</div>
+                    </div>
+                    
+                    <div class="ab-metric-card glassmorphism">
+                        <div class="metric-header">
+                            <span class="metric-icon">🎯</span>
+                            <span class="metric-title">Confiance</span>
+                        </div>
+                        <div class="metric-value" id="confidence-result">-</div>
+                        <div class="metric-subtitle">niveau de confiance</div>
+                    </div>
+                    
+                    <div class="ab-metric-card glassmorphism">
+                        <div class="metric-header">
+                            <span class="metric-icon">📈</span>
+                            <span class="metric-title">Amélioration Cible</span>
+                        </div>
+                        <div class="metric-value" id="improvement-result">-</div>
+                        <div class="metric-subtitle">gain relatif minimum</div>
+                    </div>
+                </div>
+                
+                <div class="ab-visualization">
+                    <h4>Visualisation de la Distribution d'Échantillonnage</h4>
+                    <canvas id="ab-distribution-chart"></canvas>
+                    <div class="chart-legend">
+                        <span class="legend-item">
+                            <span class="legend-color" style="background: #667eea;"></span>
+                            Distribution H0 (pas d'effet)
+                        </span>
+                        <span class="legend-item">
+                            <span class="legend-color" style="background: #f093fb;"></span>
+                            Distribution H1 (effet détectable)
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="ab-bayesian-section">
+                    <h4>🔬 Analyse Bayésienne Interactive</h4>
+                    <div class="bayesian-controls">
+                        <div class="form-group">
+                            <label for="prior-alpha">Prior α (succès)</label>
+                            <input type="number" id="prior-alpha" min="1" max="100" value="1" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="prior-beta">Prior β (échecs)</label>
+                            <input type="number" id="prior-beta" min="1" max="100" value="1" step="0.1">
+                        </div>
+                    </div>
+                    <canvas id="bayesian-chart"></canvas>
+                    <div class="bayesian-results">
+                        <div class="bayesian-metric">
+                            <span class="metric-name">Probabilité B > A:</span>
+                            <span class="metric-value" id="prob-b-better">-</span>
+                        </div>
+                        <div class="bayesian-metric">
+                            <span class="metric-name">Amélioration attendue:</span>
+                            <span class="metric-value" id="expected-improvement">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Data Visualizations Section -->
         <section class="section data-viz glassmorphism">
             <h2>Visualisations de Données Avancées</h2>
