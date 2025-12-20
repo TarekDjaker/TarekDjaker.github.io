@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "CMake: configurer",
+			"command": "configure",
+			"problemMatcher": [],
+			"detail": "Tâche configurer de modèle CMake",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
