@@ -194,8 +194,14 @@ class UltraSophisticatedPortfolio {
         // Initialize data visualizations
         this.initDataVisualizations();
         
+        // Initialize A/B testing dashboard
+        this.initABTestingDashboard();
+        
         // Initialize interactive elements
         this.initInteractiveElements();
+        
+        // Initialize theme toggle
+        this.initThemeToggle();
         
         // Hide loading screen
         setTimeout(() => this.hideLoadingScreen(), 1000);
@@ -797,39 +803,525 @@ class UltraSophisticatedPortfolio {
         const container = document.getElementById('project-timeline');
         if (!container) return;
 
-        container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">📈</div>
-                <p style="font-size: 1rem; margin-bottom: 0.5rem;">Project Timeline</p>
-                <p style="font-size: 0.8rem; opacity: 0.7;">Advanced timeline visualization</p>
-            </div>
-        `;
+        container.innerHTML = '<canvas id="timeline-canvas" style="width: 100%; height: 250px;"></canvas>';
+        
+        const canvas = document.getElementById('timeline-canvas');
+        if (!canvas) return;
+
+        canvas.width = container.clientWidth || 400;
+        canvas.height = 250;
+        canvas.style.maxWidth = '100%';
+        canvas.style.height = 'auto';
+
+        const ctx = canvas.getContext('2d');
+        
+        // Project timeline data
+        const projects = [
+            { 
+                name: 'Fused Gromov-Wasserstein', 
+                start: new Date('2023-06-01'), 
+                end: new Date('2024-07-26'), 
+                status: 'published',
+                color: '#667eea',
+                impact: 'Nature Communications'
+            },
+            { 
+                name: 'Mowgli Multi-omics', 
+                start: new Date('2022-08-01'), 
+                end: new Date('2023-11-01'), 
+                status: 'published',
+                color: '#f093fb',
+                impact: 'bioRxiv 2024'
+            },
+            { 
+                name: 'Wasserstein Singular Vectors', 
+                start: new Date('2021-09-01'), 
+                end: new Date('2022-06-01'), 
+                status: 'published',
+                color: '#4facfe',
+                impact: 'ICML 2022'
+            },
+            { 
+                name: 'OT-scOmics', 
+                start: new Date('2021-03-01'), 
+                end: new Date('2022-04-01'), 
+                status: 'published',
+                color: '#43e97b',
+                impact: 'Bioinformatics'
+            },
+            { 
+                name: 'Portfolio Website', 
+                start: new Date('2024-01-01'), 
+                end: new Date('2024-12-31'), 
+                status: 'ongoing',
+                color: '#ff6b6b',
+                impact: 'Ongoing'
+            }
+        ];
+        
+        // Timeline dimensions
+        const margin = { top: 40, right: 40, bottom: 60, left: 100 };
+        const timelineWidth = canvas.width - margin.left - margin.right;
+        const timelineHeight = canvas.height - margin.top - margin.bottom;
+        const rowHeight = timelineHeight / projects.length;
+        
+        // Date range
+        const minDate = new Date('2021-01-01');
+        const maxDate = new Date('2025-01-01');
+        const timeRange = maxDate.getTime() - minDate.getTime();
+        
+        // Animation state
+        let animationProgress = 0;
+        const animationDuration = 2500;
+        let startTime = null;
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            animationProgress = Math.min(elapsed / animationDuration, 1);
+            
+            const easeProgress = 1 - Math.pow(1 - animationProgress, 3);
+            
+            drawTimeline(easeProgress);
+            
+            if (animationProgress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function drawTimeline(progress) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw title
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = 'bold 16px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Research & Development Timeline', canvas.width / 2, 25);
+            
+            // Draw time axis
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left + timelineWidth, margin.top);
+            ctx.stroke();
+            
+            // Draw year markers
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            
+            for (let year = 2021; year <= 2024; year++) {
+                const yearDate = new Date(year, 0, 1);
+                const x = margin.left + ((yearDate.getTime() - minDate.getTime()) / timeRange) * timelineWidth;
+                
+                // Vertical line
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, margin.top);
+                ctx.lineTo(x, margin.top + timelineHeight);
+                ctx.stroke();
+                
+                // Year label
+                ctx.fillText(year.toString(), x, margin.top - 10);
+            }
+            
+            // Draw projects
+            projects.forEach((project, index) => {
+                const y = margin.top + (index * rowHeight) + rowHeight / 2;
+                const startX = margin.left + ((project.start.getTime() - minDate.getTime()) / timeRange) * timelineWidth;
+                const endX = margin.left + ((project.end.getTime() - minDate.getTime()) / timeRange) * timelineWidth;
+                const barWidth = endX - startX;
+                
+                // Animate project bars
+                const projectProgress = Math.max(0, Math.min(1, (progress - index * 0.1) * 2));
+                const currentBarWidth = barWidth * projectProgress;
+                
+                if (projectProgress > 0) {
+                    // Project bar
+                    ctx.fillStyle = project.color;
+                    ctx.fillRect(startX, y - 8, currentBarWidth, 16);
+                    
+                    // Project bar glow
+                    ctx.shadowColor = project.color;
+                    ctx.shadowBlur = 10;
+                    ctx.fillRect(startX, y - 8, currentBarWidth, 16);
+                    ctx.shadowBlur = 0;
+                    
+                    // Status indicator
+                    if (project.status === 'published') {
+                        ctx.fillStyle = '#43e97b';
+                        ctx.beginPath();
+                        ctx.arc(endX, y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    } else {
+                        ctx.strokeStyle = '#ff6b6b';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(endX, y, 4, 0, 2 * Math.PI);
+                        ctx.stroke();
+                    }
+                    
+                    // Project name
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = '12px Inter, sans-serif';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(project.name, margin.left - 10, y + 4);
+                    
+                    // Impact/Publication
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.font = '10px Inter, sans-serif';
+                    ctx.fillText(project.impact, margin.left - 10, y + 18);
+                }
+            });
+            
+            // Legend
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'left';
+            
+            // Published indicator
+            ctx.fillStyle = '#43e97b';
+            ctx.beginPath();
+            ctx.arc(margin.left, canvas.height - 30, 4, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.fillText('Published', margin.left + 10, canvas.height - 26);
+            
+            // Ongoing indicator
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(margin.left + 80, canvas.height - 30, 4, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.fillText('Ongoing', margin.left + 90, canvas.height - 26);
+        }
+        
+        // Start animation
+        requestAnimationFrame(animate);
+        
+        // Add hover interaction
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+            
+            // Check if hovering over a project bar
+            let hovering = false;
+            projects.forEach((project, index) => {
+                const y = margin.top + (index * rowHeight) + rowHeight / 2;
+                const startX = margin.left + ((project.start.getTime() - minDate.getTime()) / timeRange) * timelineWidth;
+                const endX = margin.left + ((project.end.getTime() - minDate.getTime()) / timeRange) * timelineWidth;
+                
+                if (mouseX >= startX && mouseX <= endX && mouseY >= y - 8 && mouseY <= y + 8) {
+                    hovering = true;
+                    canvas.style.cursor = 'pointer';
+                    const startDate = project.start.toLocaleDateString('fr-FR');
+                    const endDate = project.end.toLocaleDateString('fr-FR');
+                    canvas.title = `${project.name}\n${startDate} - ${endDate}\nStatus: ${project.status}\nPublication: ${project.impact}`;
+                }
+            });
+            
+            if (!hovering) {
+                canvas.style.cursor = 'default';
+                canvas.title = '';
+            }
+        });
     }
 
     createTechNetwork() {
         const container = document.getElementById('tech-network');
         if (!container) return;
 
-        container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🕸️</div>
-                <p style="font-size: 1rem; margin-bottom: 0.5rem;">Technology Network</p>
-                <p style="font-size: 0.8rem; opacity: 0.7;">Interactive network graph</p>
-            </div>
-        `;
+        container.innerHTML = '<canvas id="tech-network-canvas" style="width: 100%; height: 300px;"></canvas>';
+        
+        const canvas = document.getElementById('tech-network-canvas');
+        if (!canvas) return;
+
+        const size = Math.min(400, container.clientWidth || 300);
+        canvas.width = size;
+        canvas.height = 300;
+        canvas.style.maxWidth = '100%';
+        canvas.style.height = 'auto';
+
+        const ctx = canvas.getContext('2d');
+        const centerX = size / 2;
+        const centerY = 150;
+
+        // Technology nodes with relationships
+        const techStack = [
+            { name: 'Python', x: centerX, y: centerY, size: 25, color: '#3776ab', connections: [1, 2, 3, 4, 5] },
+            { name: 'TensorFlow', x: centerX - 80, y: centerY - 60, size: 20, color: '#ff6f00', connections: [0, 2, 8] },
+            { name: 'PyTorch', x: centerX + 80, y: centerY - 60, size: 20, color: '#ee4c2c', connections: [0, 1, 8] },
+            { name: 'scikit-learn', x: centerX - 120, y: centerY, size: 18, color: '#f7931e', connections: [0, 4, 5] },
+            { name: 'Pandas', x: centerX - 60, y: centerY + 60, size: 18, color: '#150458', connections: [0, 3, 5] },
+            { name: 'NumPy', x: centerX + 60, y: centerY + 60, size: 18, color: '#013243', connections: [0, 3, 4] },
+            { name: 'Docker', x: centerX + 120, y: centerY, size: 16, color: '#2496ed', connections: [7, 8, 9] },
+            { name: 'Kubernetes', x: centerX + 140, y: centerY - 40, size: 15, color: '#326ce5', connections: [6, 8] },
+            { name: 'MLflow', x: centerX, y: centerY - 100, size: 16, color: '#0194e2', connections: [1, 2, 6, 7] },
+            { name: 'Streamlit', x: centerX + 100, y: centerY + 80, size: 15, color: '#ff4b4b', connections: [6] }
+        ];
+
+        // Animation state
+        let animationProgress = 0;
+        const animationDuration = 3000;
+        let startTime = null;
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            animationProgress = Math.min(elapsed / animationDuration, 1);
+            
+            const easeProgress = 1 - Math.pow(1 - animationProgress, 3);
+            
+            drawTechNetwork(easeProgress);
+            
+            if (animationProgress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function drawTechNetwork(progress) {
+            ctx.clearRect(0, 0, size, 300);
+            
+            // Draw connections first (behind nodes)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            
+            techStack.forEach((node, index) => {
+                if (node.connections) {
+                    node.connections.forEach(connectionIndex => {
+                        if (connectionIndex > index && techStack[connectionIndex]) {
+                            const target = techStack[connectionIndex];
+                            const opacity = progress * 0.3;
+                            
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                            ctx.beginPath();
+                            ctx.moveTo(node.x, node.y);
+                            ctx.lineTo(target.x, target.y);
+                            ctx.stroke();
+                        }
+                    });
+                }
+            });
+            
+            // Draw nodes
+            techStack.forEach((node, index) => {
+                const nodeProgress = Math.max(0, Math.min(1, (progress - index * 0.1) * 2));
+                const currentSize = node.size * nodeProgress;
+                
+                // Glow effect
+                ctx.shadowColor = node.color;
+                ctx.shadowBlur = 15;
+                ctx.fillStyle = node.color;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, currentSize, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Inner circle
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, currentSize * 0.6, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Label
+                if (nodeProgress > 0.5) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                    ctx.font = '11px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText(node.name, node.x, node.y + currentSize + 5);
+                }
+            });
+        }
+
+        // Start animation
+        requestAnimationFrame(animate);
+        
+        // Add hover interaction
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+            
+            // Check if hovering over a node
+            let hovering = false;
+            techStack.forEach(node => {
+                const distance = Math.sqrt(Math.pow(mouseX - node.x, 2) + Math.pow(mouseY - node.y, 2));
+                if (distance < node.size) {
+                    hovering = true;
+                    canvas.style.cursor = 'pointer';
+                    // Could add tooltip here
+                }
+            });
+            
+            if (!hovering) {
+                canvas.style.cursor = 'default';
+            }
+        });
     }
 
     createContributionHeatmap() {
         const container = document.getElementById('contribution-heatmap');
         if (!container) return;
 
-        container.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 200px; color: rgba(255, 255, 255, 0.6); flex-direction: column;">
-                <div style="font-size: 2rem; margin-bottom: 1rem;">🔥</div>
-                <p style="font-size: 1rem; margin-bottom: 0.5rem;">GitHub Contributions</p>
-                <p style="font-size: 0.8rem; opacity: 0.7;">Activity heatmap visualization</p>
-            </div>
-        `;
+        container.innerHTML = '<canvas id="contribution-canvas" style="width: 100%; height: 200px;"></canvas>';
+        
+        const canvas = document.getElementById('contribution-canvas');
+        if (!canvas) return;
+
+        canvas.width = container.clientWidth || 400;
+        canvas.height = 200;
+        canvas.style.maxWidth = '100%';
+        canvas.style.height = 'auto';
+
+        const ctx = canvas.getContext('2d');
+        
+        // Generate realistic contribution data for the past year
+        const today = new Date();
+        const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        
+        const cellSize = Math.min(12, (canvas.width - 80) / 53); // 53 weeks in a year
+        const cellGap = 2;
+        const startX = 40;
+        const startY = 20;
+        
+        // Generate contribution data (0-4 scale like GitHub)
+        const contributions = [];
+        for (let week = 0; week < 53; week++) {
+            const weekData = [];
+            for (let day = 0; day < 7; day++) {
+                // Simulate realistic patterns: higher activity on weekdays, some vacation periods
+                const isWeekend = day === 0 || day === 6;
+                const isVacation = Math.random() < 0.1; // 10% chance of vacation
+                const baseActivity = isWeekend ? 0.3 : 0.8;
+                const activity = isVacation ? 0 : Math.random() * baseActivity;
+                
+                let level = 0;
+                if (activity > 0.7) level = 4;
+                else if (activity > 0.5) level = 3;
+                else if (activity > 0.3) level = 2;
+                else if (activity > 0.1) level = 1;
+                
+                weekData.push(level);
+            }
+            contributions.push(weekData);
+        }
+        
+        // Color scheme (GitHub-like)
+        const colors = [
+            'rgba(255, 255, 255, 0.1)',  // No contributions
+            'rgba(102, 126, 234, 0.3)',  // Low
+            'rgba(102, 126, 234, 0.5)',  // Medium-low  
+            'rgba(102, 126, 234, 0.7)',  // Medium-high
+            'rgba(102, 126, 234, 0.9)'   // High
+        ];
+        
+        // Animation state
+        let animationProgress = 0;
+        const animationDuration = 2000;
+        let startTime = null;
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            animationProgress = Math.min(elapsed / animationDuration, 1);
+            
+            drawHeatmap(animationProgress);
+            
+            if (animationProgress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function drawHeatmap(progress) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw day labels
+            const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            
+            dayLabels.forEach((label, index) => {
+                if (label) {
+                    ctx.fillText(label, startX - 5, startY + index * (cellSize + cellGap) + cellSize / 2);
+                }
+            });
+            
+            // Draw month labels
+            const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            
+            for (let month = 0; month < 12; month++) {
+                const x = startX + (month * 4.4) * (cellSize + cellGap);
+                if (x < canvas.width - 30) {
+                    ctx.fillText(monthLabels[month], x, startY - 15);
+                }
+            }
+            
+            // Draw contribution squares
+            const totalCells = 53 * 7;
+            contributions.forEach((week, weekIndex) => {
+                week.forEach((level, dayIndex) => {
+                    const cellIndex = weekIndex * 7 + dayIndex;
+                    const cellProgress = Math.max(0, Math.min(1, (progress - cellIndex / totalCells) * 10));
+                    
+                    if (cellProgress > 0) {
+                        const x = startX + weekIndex * (cellSize + cellGap);
+                        const y = startY + dayIndex * (cellSize + cellGap);
+                        
+                        ctx.fillStyle = colors[level];
+                        ctx.fillRect(x, y, cellSize * cellProgress, cellSize * cellProgress);
+                        
+                        // Add subtle border
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                        ctx.lineWidth = 0.5;
+                        ctx.strokeRect(x, y, cellSize, cellSize);
+                    }
+                });
+            });
+            
+            // Add legend
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '9px Inter, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('Less', canvas.width - 120, canvas.height - 15);
+            ctx.fillText('More', canvas.width - 25, canvas.height - 15);
+            
+            // Legend squares
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(canvas.width - 100 + i * 12, canvas.height - 25, 8, 8);
+            }
+        }
+
+        // Start animation
+        requestAnimationFrame(animate);
+        
+        // Add hover effect for individual squares
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
+            
+            // Calculate which cell is being hovered
+            const weekIndex = Math.floor((mouseX - startX) / (cellSize + cellGap));
+            const dayIndex = Math.floor((mouseY - startY) / (cellSize + cellGap));
+            
+            if (weekIndex >= 0 && weekIndex < 53 && dayIndex >= 0 && dayIndex < 7) {
+                canvas.style.cursor = 'pointer';
+                canvas.title = `Week ${weekIndex + 1}, Day ${dayIndex + 1}: ${contributions[weekIndex][dayIndex]} contributions`;
+            } else {
+                canvas.style.cursor = 'default';
+                canvas.title = '';
+            }
+        });
     }
 
     initInteractiveElements() {
@@ -888,6 +1380,434 @@ class UltraSophisticatedPortfolio {
                 photo.style.filter = `drop-shadow(0 20px 40px rgba(102, 126, 234, ${glowIntensity * 0.5}))`;
             }, 50);
         }
+    }
+    
+    // ==========================================
+    // A/B TESTING DASHBOARD FUNCTIONALITY
+    // ==========================================
+    
+    initABTestingDashboard() {
+        console.log('📊 Initializing A/B Testing Dashboard...');
+        
+        const calculateBtn = document.getElementById('calculate-sample-size');
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', () => this.calculateSampleSize());
+        }
+        
+        // Initialize charts
+        this.initABCharts();
+        
+        // Add live update listeners
+        this.addABEventListeners();
+    }
+    
+    calculateSampleSize() {
+        const baselineConversion = parseFloat(document.getElementById('baseline-conversion').value) / 100;
+        const minimumEffect = parseFloat(document.getElementById('minimum-effect').value) / 100;
+        const statisticalPower = parseFloat(document.getElementById('statistical-power').value);
+        const significanceLevel = parseFloat(document.getElementById('significance-level').value);
+        
+        // Calculate improved conversion rate
+        const improvedConversion = baselineConversion * (1 + minimumEffect);
+        
+        // Z-scores for power and significance
+        const zAlpha = this.getZScore(1 - significanceLevel / 2);
+        const zBeta = this.getZScore(statisticalPower);
+        
+        // Sample size calculation using two-proportion z-test formula
+        const pooledP = (baselineConversion + improvedConversion) / 2;
+        const numerator = Math.pow(zAlpha * Math.sqrt(2 * pooledP * (1 - pooledP)) + 
+                                  zBeta * Math.sqrt(baselineConversion * (1 - baselineConversion) + 
+                                                   improvedConversion * (1 - improvedConversion)), 2);
+        const denominator = Math.pow(improvedConversion - baselineConversion, 2);
+        
+        const sampleSizePerGroup = Math.ceil(numerator / denominator);
+        
+        // Estimate duration (assuming 1000 visitors per day per group)
+        const visitorsPerDay = 1000;
+        const estimatedDuration = Math.ceil(sampleSizePerGroup / visitorsPerDay);
+        
+        // Update UI with results
+        this.updateABResults({
+            sampleSize: sampleSizePerGroup,
+            duration: estimatedDuration,
+            confidence: (1 - significanceLevel) * 100,
+            improvement: minimumEffect * 100
+        });
+        
+        // Update charts
+        this.updateABCharts({
+            baselineConversion,
+            improvedConversion,
+            sampleSize: sampleSizePerGroup,
+            significanceLevel,
+            statisticalPower
+        });
+    }
+    
+    getZScore(probability) {
+        // Approximate inverse normal distribution for common values
+        const zScores = {
+            0.90: 1.282, 0.95: 1.645, 0.975: 1.96, 0.99: 2.326, 0.995: 2.576
+        };
+        
+        // Find closest match or interpolate
+        const keys = Object.keys(zScores).map(Number).sort((a, b) => a - b);
+        for (let i = 0; i < keys.length; i++) {
+            if (probability <= keys[i]) {
+                return zScores[keys[i]];
+            }
+        }
+        return 2.576; // Default for very high confidence
+    }
+    
+    updateABResults(results) {
+        document.getElementById('sample-size-result').textContent = results.sampleSize.toLocaleString();
+        document.getElementById('duration-result').textContent = results.duration.toLocaleString();
+        document.getElementById('confidence-result').textContent = results.confidence.toFixed(1) + '%';
+        document.getElementById('improvement-result').textContent = results.improvement.toFixed(1) + '%';
+        
+        // Animate the numbers
+        this.animateABNumbers();
+    }
+    
+    animateABNumbers() {
+        const metrics = document.querySelectorAll('.ab-metric-card');
+        metrics.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    card.style.transform = 'scale(1)';
+                }, 200);
+            }, index * 100);
+        });
+    }
+    
+    initABCharts() {
+        this.drawDistributionChart();
+        this.drawBayesianChart();
+    }
+    
+    updateABCharts(params) {
+        this.drawDistributionChart(params);
+        this.updateBayesianAnalysis(params);
+    }
+    
+    drawDistributionChart(params = null) {
+        const canvas = document.getElementById('ab-distribution-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 300;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Default parameters for visualization
+        const defaultParams = {
+            baselineConversion: 0.05,
+            improvedConversion: 0.06,
+            sampleSize: 1000,
+            significanceLevel: 0.05
+        };
+        
+        const p = params || defaultParams;
+        
+        // Draw axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
+        
+        // X-axis
+        ctx.beginPath();
+        ctx.moveTo(50, canvas.height - 50);
+        ctx.lineTo(canvas.width - 20, canvas.height - 50);
+        ctx.stroke();
+        
+        // Y-axis
+        ctx.beginPath();
+        ctx.moveTo(50, 20);
+        ctx.lineTo(50, canvas.height - 50);
+        ctx.stroke();
+        
+        // Draw normal distributions for H0 and H1
+        this.drawNormalDistribution(ctx, canvas, p, 'H0', '#667eea');
+        this.drawNormalDistribution(ctx, canvas, p, 'H1', '#f093fb');
+        
+        // Add labels
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Différence de taux de conversion', canvas.width / 2 - 80, canvas.height - 20);
+        
+        // Rotate and draw Y-axis label
+        ctx.save();
+        ctx.translate(20, canvas.height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText('Densité de probabilité', -40, 0);
+        ctx.restore();
+    }
+    
+    drawNormalDistribution(ctx, canvas, params, hypothesis, color) {
+        const { baselineConversion, improvedConversion, sampleSize } = params;
+        
+        // Calculate distribution parameters
+        const p1 = baselineConversion;
+        const p2 = hypothesis === 'H0' ? baselineConversion : improvedConversion;
+        const mean = p2 - p1;
+        const standardError = Math.sqrt((p1 * (1 - p1) + p2 * (1 - p2)) / sampleSize);
+        
+        // Draw the curve
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        const xMin = -0.05;
+        const xMax = 0.05;
+        const steps = 200;
+        
+        for (let i = 0; i <= steps; i++) {
+            const x = xMin + (xMax - xMin) * i / steps;
+            const y = this.normalPDF(x, mean, standardError);
+            
+            const canvasX = 50 + (x - xMin) / (xMax - xMin) * (canvas.width - 70);
+            const canvasY = canvas.height - 50 - y * 2000; // Scale for visibility
+            
+            if (i === 0) {
+                ctx.moveTo(canvasX, canvasY);
+            } else {
+                ctx.lineTo(canvasX, canvasY);
+            }
+        }
+        
+        ctx.stroke();
+    }
+    
+    normalPDF(x, mean, std) {
+        return (1 / (std * Math.sqrt(2 * Math.PI))) * 
+               Math.exp(-0.5 * Math.pow((x - mean) / std, 2));
+    }
+    
+    drawBayesianChart() {
+        const canvas = document.getElementById('bayesian-chart');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 300;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw placeholder Bayesian visualization
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(50, 50, canvas.width - 100, canvas.height - 100);
+        
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '16px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Analyse Bayésienne', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Distributions Beta posteriori', canvas.width / 2, canvas.height / 2 + 10);
+    }
+    
+    updateBayesianAnalysis(params) {
+        // Simplified Bayesian analysis
+        const priorAlpha = parseFloat(document.getElementById('prior-alpha').value) || 1;
+        const priorBeta = parseFloat(document.getElementById('prior-beta').value) || 1;
+        
+        // Simulate some data for demonstration
+        const sampleSizeA = 1000;
+        const conversionsA = Math.round(sampleSizeA * params.baselineConversion);
+        const sampleSizeB = 1000;
+        const conversionsB = Math.round(sampleSizeB * params.improvedConversion);
+        
+        // Beta posterior parameters
+        const alphaA = priorAlpha + conversionsA;
+        const betaA = priorBeta + sampleSizeA - conversionsA;
+        const alphaB = priorAlpha + conversionsB;
+        const betaB = priorBeta + sampleSizeB - conversionsB;
+        
+        // Monte Carlo simulation for P(B > A)
+        const simulations = 10000;
+        let bBetterCount = 0;
+        
+        for (let i = 0; i < simulations; i++) {
+            const sampleA = this.betaRandom(alphaA, betaA);
+            const sampleB = this.betaRandom(alphaB, betaB);
+            if (sampleB > sampleA) bBetterCount++;
+        }
+        
+        const probBBetter = bBetterCount / simulations;
+        const expectedImprovement = (alphaB / (alphaB + betaB) - alphaA / (alphaA + betaA)) * 100;
+        
+        // Update UI
+        document.getElementById('prob-b-better').textContent = (probBBetter * 100).toFixed(1) + '%';
+        document.getElementById('expected-improvement').textContent = expectedImprovement.toFixed(2) + '%';
+    }
+    
+    betaRandom(alpha, beta) {
+        // Simple Beta distribution sampling using Gamma distributions
+        const gamma1 = this.gammaRandom(alpha);
+        const gamma2 = this.gammaRandom(beta);
+        return gamma1 / (gamma1 + gamma2);
+    }
+    
+    gammaRandom(shape) {
+        // Simplified Gamma distribution sampling
+        if (shape < 1) {
+            return this.gammaRandom(shape + 1) * Math.pow(Math.random(), 1/shape);
+        }
+        
+        const d = shape - 1/3;
+        const c = 1 / Math.sqrt(9 * d);
+        
+        for (let i = 0; i < 100; i++) {
+            let x, v;
+            do {
+                x = this.normalRandom();
+                v = 1 + c * x;
+            } while (v <= 0);
+            
+            v = v * v * v;
+            const u = Math.random();
+            
+            if (u < 1 - 0.0331 * x * x * x * x || 
+                Math.log(u) < 0.5 * x * x + d * (1 - v + Math.log(v))) {
+                return d * v;
+            }
+        }
+        return 1; // Fallback
+    }
+    
+    normalRandom() {
+        // Box-Muller transform
+        if (this.spare !== undefined) {
+            const temp = this.spare;
+            delete this.spare;
+            return temp;
+        }
+        
+        const u = Math.random();
+        const v = Math.random();
+        const mag = Math.sqrt(-2 * Math.log(u));
+        this.spare = mag * Math.cos(2 * Math.PI * v);
+        return mag * Math.sin(2 * Math.PI * v);
+    }
+    
+    addABEventListeners() {
+        // Add live update listeners for form inputs
+        const inputs = [
+            'baseline-conversion', 'minimum-effect', 
+            'statistical-power', 'significance-level',
+            'prior-alpha', 'prior-beta'
+        ];
+        
+        inputs.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', () => {
+                    // Debounce the calculations
+                    clearTimeout(this.abCalculationTimeout);
+                    this.abCalculationTimeout = setTimeout(() => {
+                        this.calculateSampleSize();
+                    }, 500);
+                });
+            }
+        });
+    }
+    
+    // ==========================================
+    // THEME TOGGLE FUNCTIONALITY
+    // ==========================================
+    
+    initThemeToggle() {
+        console.log('🎨 Initializing theme toggle...');
+        
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+        
+        // Get current theme from localStorage or default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        this.setTheme(currentTheme);
+        
+        // Add click listener
+        themeToggle.addEventListener('click', () => this.toggleTheme());
+        
+        // Add keyboard support
+        themeToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.toggleTheme();
+            }
+        });
+        
+        // Update button icon based on current theme
+        this.updateThemeToggleIcon(currentTheme);
+    }
+    
+    toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        // Smooth transition
+        html.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        // Set new theme
+        this.setTheme(newTheme);
+        
+        // Save to localStorage
+        localStorage.setItem('theme', newTheme);
+        
+        // Update button
+        this.updateThemeToggleIcon(newTheme);
+        
+        // Remove transition after animation
+        setTimeout(() => {
+            html.style.transition = '';
+        }, 300);
+        
+        console.log(`🎨 Theme switched to: ${newTheme}`);
+    }
+    
+    setTheme(theme) {
+        const html = document.documentElement;
+        html.setAttribute('data-theme', theme);
+        
+        // Update aria-pressed for accessibility
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        }
+    }
+    
+    updateThemeToggleIcon(theme) {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (!themeToggle) return;
+        
+        // Clear existing content
+        themeToggle.innerHTML = '';
+        
+        // Create icon element
+        const icon = document.createElement('span');
+        icon.className = 'theme-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        
+        if (theme === 'dark') {
+            // Show sun icon for switching to light
+            icon.innerHTML = '☀️';
+            icon.style.filter = 'drop-shadow(0 0 8px rgba(255, 193, 7, 0.6))';
+        } else {
+            // Show moon icon for switching to dark
+            icon.innerHTML = '🌙';
+            icon.style.filter = 'drop-shadow(0 0 8px rgba(108, 117, 125, 0.6))';
+        }
+        
+        themeToggle.appendChild(icon);
+        
+        // Add screen reader text
+        const srText = document.createElement('span');
+        srText.className = 'sr-only';
+        srText.textContent = theme === 'dark' ? 'Passer au thème clair' : 'Passer au thème sombre';
+        themeToggle.appendChild(srText);
     }
 }
 
